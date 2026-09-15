@@ -1,0 +1,3 @@
+NurtureMom V1 deployment-ready build
+
+Upload the contents of this folder to the existing NurtureMom web host. index.html is the polished integrated build. Preserve your existing production environment/configuration for notification email/push services.

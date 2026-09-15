@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#7b3f59">
+<link rel="manifest" href="manifest.webmanifest">
+<title>NurtureMom — My Village</title>
+<style>
+:root{
+  --wine:#7b3f59; --rose:#f3e4df; --paper:#fffaf6; --ink:#2b2023;
+  --muted:#786c6f; --line:#eadfd9; --green:#3b8d62; --shadow:0 10px 30px rgba(79,50,58,.12)
+}
+*{box-sizing:border-box}
+body{margin:0;background:#f5eee8;color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}
+button,input,select,textarea{font:inherit}
+.app{max-width:520px;margin:0 auto;min-height:100vh;background:var(--paper);position:relative;padding-bottom:84px}
+.topbar{height:62px;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(255,250,246,.96);backdrop-filter:blur(10px);z-index:5}
+.brand{font-family:Georgia,serif;font-size:20px;font-weight:700}
+.iconbtn{width:38px;height:38px;border-radius:50%;border:0;background:transparent;font-size:20px}
+.hero{margin:14px;border-radius:18px;overflow:hidden;position:relative;min-height:190px;background:linear-gradient(135deg,#e8cfc6,#d9b8b0 55%,#a16f7d)}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 68% 38%,#f5ded5 0 16%,transparent 17%),radial-gradient(circle at 55% 56%,#6c3a4f 0 13%,transparent 14%),linear-gradient(135deg,transparent 45%,#7b3f59 46% 60%,transparent 61%)}
+.hero::after{content:"A stronger village\A makes a brighter journey.  ♡";white-space:pre;position:absolute;left:18px;bottom:16px;color:white;font-family:Georgia,serif;font-size:22px;line-height:1.15;text-shadow:0 2px 12px #0008}
+.btn{border:0;border-radius:12px;padding:14px 18px;cursor:pointer}
+.primary{background:linear-gradient(180deg,#8a4964,#6c334d);color:white;box-shadow:var(--shadow)}
+.secondary{background:white;border:1px solid var(--line);color:var(--wine)}
+.full{width:calc(100% - 28px);margin:0 14px 14px}
+.section{padding:0 14px}
+.section h2{font-family:Georgia,serif;font-size:20px;margin:18px 0 10px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 3px 12px rgba(59,37,44,.05);overflow:hidden}
+.person{display:grid;grid-template-columns:48px 1fr auto;gap:10px;align-items:center;padding:12px;border-bottom:1px solid var(--line)}
+.person:last-child{border-bottom:0}
+.avatar{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:#ead7d2;font-weight:700;color:var(--wine)}
+.name{font-weight:700}.small{font-size:12px;color:var(--muted)}.dot{color:var(--green)}
+.note{margin:14px;padding:16px;border-radius:16px;background:linear-gradient(135deg,#f3e2dd,#f8eee8);text-align:center;color:#6d4a55}
+.bottom{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:min(520px,100%);height:72px;background:#fffaf9;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);z-index:6}
+.nav{border:0;background:transparent;font-size:11px;color:#6d6265}.nav b{display:block;font-size:20px;margin-bottom:2px}.nav.active{color:var(--wine);font-weight:700}
+.modal{position:fixed;inset:0;background:#2d1e2480;display:none;align-items:flex-end;justify-content:center;z-index:20}
+.modal.open{display:flex}
+.sheet{width:min(520px,100%);max-height:92vh;overflow:auto;background:var(--paper);border-radius:24px 24px 0 0;padding:20px 18px 28px}
+.sheet h2{font-family:Georgia,serif;margin:0 0 5px}.sub{color:var(--muted);font-size:14px;margin:0 0 16px}
+label{display:block;font-weight:700;margin:13px 0 6px}
+input,select,textarea{width:100%;border:1px solid #ddcfca;border-radius:12px;padding:13px;background:white;color:var(--ink)}
+textarea{min-height:90px;resize:vertical}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.actions{display:flex;gap:10px;margin-top:16px}.actions .btn{flex:1}
+.status{margin-top:12px;padding:11px 12px;border-radius:10px;background:#f3ece8;font-size:13px;display:none}
+.status.show{display:block}.ok{color:#2f7653}.warn{color:#945b18}
+.settings{display:none;padding:14px}.settings.show{display:block}.village.hidden{display:none}
+.setting-row{display:grid;grid-template-columns:36px 1fr auto;gap:10px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}
+.switch{position:relative;width:46px;height:26px;background:#cfc4c5;border-radius:999px;border:0}
+.switch.on{background:var(--wine)}
+.switch::after{content:"";position:absolute;width:20px;height:20px;border-radius:50%;background:white;top:3px;left:3px;transition:.2s}
+.switch.on::after{left:23px}
+.pill{display:inline-block;padding:4px 8px;border-radius:999px;background:#edf6f0;color:#2c7b53;font-size:11px}
+.routine.hidden{display:none}.routine-item{padding:14px;border-bottom:1px solid var(--line)}.routine-item:last-child{border-bottom:0}.routine-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.routine-time{font-weight:800;color:var(--wine)}.routine-actions{display:flex;gap:7px;margin-top:10px;flex-wrap:wrap}.mini{padding:8px 10px;border-radius:10px;font-size:12px}.empty{padding:22px;text-align:center;color:var(--muted)}.care-banner{margin:14px;padding:16px;border-radius:16px;background:linear-gradient(135deg,#f8e9e4,#f2ddd7)}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <button class="iconbtn" onclick="goVillage()">‹</button>
+    <div class="brand" id="pageTitle">My Village</div>
+    <button class="iconbtn" onclick="openSettings()" title="Settings">⚙</button>
+  </header>
+
+  <main id="villageView" class="village">
+    <div class="hero"></div>
+    <button class="btn primary full" onclick="openInvite()">＋ Invite Someone</button>
+    <section class="section">
+      <h2>Your Village <span class="small" id="villageCount"></span></h2>
+      <div class="card" id="people"></div>
+    </section>
+    <div class="note">👥 It takes a village.<br><b>Thank you for being part of mine. ♡</b></div>
+  </main>
+
+  <main id="routineView" class="routine hidden">
+    <div class="care-banner"><b>♡ My Care Routine</b><div class="small" style="margin-top:5px">Gentle reminders you choose for vitamins, hydration, rest, medication, or anything that supports your day.</div></div>
+    <button class="btn primary full" onclick="openRoutine()">＋ Add a Reminder</button>
+    <section class="section"><h2>Today</h2><div class="card" id="routineList"></div></section>
+    <div class="note">These are personal reminders you create for yourself and are not medical advice.</div>
+  </main>
+
+  <main id="settingsView" class="settings">
+    <section class="section">
+      <h2>Profile & Settings</h2>
+      <div class="card" style="margin-top:12px">
+        <h3 style="margin:0 0 6px">NurtureMom account</h3>
+        <div id="authSignedOut">
+          <div class="small">Sign in to keep your Care Routines synced securely across devices.</div>
+          <label for="authEmail" style="margin-top:12px">Email</label>
+          <input id="authEmail" type="email" autocomplete="email" placeholder="you@example.com">
+          <button class="btn" style="margin-top:10px;width:100%" onclick="sendMagicLink()">Email me a sign-in link</button>
+        </div>
+        <div id="authSignedIn" style="display:none">
+          <div class="small">Signed in as <b id="authUserEmail"></b></div>
+          <label for="profileName" style="margin-top:12px">What should NurtureMom call you?</label>
+          <input id="profileName" autocomplete="name" placeholder="Your first name">
+          <div class="row">
+            <div><label for="profileTimezone">Time zone</label><input id="profileTimezone" readonly></div>
+            <div style="display:flex;align-items:end"><button class="btn" style="width:100%" onclick="saveNurtureMomProfile()">Save profile</button></div>
+          </div>
+          <div id="profileStatus" class="status"></div>
+          <button class="btn secondary" style="margin-top:10px" onclick="signOutNurtureMom()">Sign out</button>
+        </div>
+        <div id="authStatus" class="status"></div>
+      </div>
+      <div class="card">
+        <div class="setting-row"><div>🔔</div><div><b>Push notifications</b><div class="small" id="pushState">Not enabled</div></div><button id="pushSwitch" class="switch" onclick="togglePush()"></button></div>
+        <div class="setting-row"><div>🧪</div><div><b>Test notification</b><div class="small">Confirm notifications work on this device</div></div><button class="btn secondary" onclick="sendTestNotification()">Test</button></div>
+        <div class="setting-row"><div>✉️</div><div><b>Invitation delivery</b><div class="small">Direct API when connected; share/email fallback otherwise</div></div><span class="pill">Ready</span></div>
+        <div class="setting-row"><div>🔒</div><div><b>Village privacy</b><div class="small">Private invite flow with unique tokens</div></div><span class="small">Private</span></div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="bottom">
+    <button class="nav"><b>⌂</b>Home</button>
+    <button class="nav"><b>♡</b>Recovery</button>
+    <button class="nav active" onclick="goVillage()"><b>♧</b>My Village</button>
+    <button class="nav"><b>♡</b>Requests</button>
+    <button class="nav" onclick="goRoutine()"><b>▣</b>My Care</button>
+  </nav>
+</div>
+
+<div id="inviteModal" class="modal" onclick="backdropClose(event)">
+  <div class="sheet">
+    <h2>Invite to My Village</h2>
+    <p class="sub">Invite someone you trust to help you feel supported.</p>
+    <div class="row">
+      <div><label for="inviteName">Name</label><input id="inviteName" placeholder="e.g. Tasha"></div>
+      <div><label for="inviteRole">Relationship</label><select id="inviteRole"><option>Partner</option><option>Sister</option><option>Friend</option><option>Parent</option><option>Neighbor</option><option>Church</option><option>Other</option></select></div>
+    </div>
+    <label for="inviteEmail">Email</label>
+    <input id="inviteEmail" type="email" placeholder="name@example.com">
+    <label for="inviteMessage">Personal note</label>
+    <textarea id="inviteMessage">I’d love for you to be part of my NurtureMom village. Your support means a lot to me. ♡</textarea>
+    <div class="actions">
+      <button class="btn secondary" onclick="closeInvite()">Cancel</button>
+      <button class="btn primary" onclick="sendInvite()">Send Invite</button>
+    </div>
+    <div id="inviteStatus" class="status"></div>
+  </div>
+</div>
+
+<div id="routineModal" class="modal" onclick="routineBackdropClose(event)">
+  <div class="sheet">
+    <h2>Add a Care Reminder</h2><p class="sub">A gentle nudge, right when you want it.</p>
+    <label for="routineName">Reminder</label><input id="routineName" placeholder="e.g. Take morning vitamin">
+    <div class="row"><div><label for="routineTime">Time</label><input id="routineTime" type="time"></div><div><label for="routineRepeat">Repeat</label><select id="routineRepeat" onchange="toggleOnceDate()"><option value="daily">Every day</option><option value="weekdays">Weekdays</option><option value="weekends">Weekends</option><option value="once">Once</option></select></div></div><div id="onceDateWrap" class="hidden"><label for="routineDate">Date</label><input id="routineDate" type="date"><div class="small" style="margin-top:5px">This reminder will run once on the date and time you choose.</div></div>
+    <label for="routineNote">Note (optional)</label><textarea id="routineNote" placeholder="e.g. Take with breakfast"></textarea>
+    <div class="actions"><button class="btn secondary" onclick="closeRoutine()">Cancel</button><button class="btn primary" onclick="saveRoutine()">Save Reminder</button></div>
+    <div id="routineStatus" class="status"></div>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script>
+const API_BASE = window.NURTUREMOM_API_BASE || "";
+const inviteLinkBase = location.origin + location.pathname.replace(/\/[^/]*$/,'/') + "accept.html";
+const seed = [
+ {name:"James",role:"Partner",status:"Available"},
+ {name:"Tasha",role:"Sister",status:"Busy this week"},
+ {name:"Melissa",role:"Friend",status:"Available"},
+ {name:"Grace",role:"Church",status:"Available"},
+ {name:"Daniela",role:"Neighbor",status:"Available"}
+];
+function getVillage(){return JSON.parse(localStorage.getItem("nurturemom_village")||"null")||seed}
+function saveVillage(v){localStorage.setItem("nurturemom_village",JSON.stringify(v));renderVillage()}
+function esc(s){return String(s||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]))}
+function renderVillage(){
+ const v=getVillage(); villageCount.textContent=`(${v.length})`;
+ people.innerHTML=v.map(p=>`<div class="person"><div class="avatar">${esc((p.name||"?").slice(0,1).toUpperCase())}</div><div><div class="name">${esc(p.name)} <span class="small">(${esc(p.role||"Villager")})</span></div><div class="small"><span class="dot">●</span> ${esc(p.status||"Invited")}</div></div><div>•••</div></div>`).join("")
+}
+function openInvite(){inviteModal.classList.add("open")}
+function closeInvite(){inviteModal.classList.remove("open")}
+function backdropClose(e){if(e.target.id==="inviteModal")closeInvite()}
+function setInviteStatus(msg,type="ok"){inviteStatus.className=`status show ${type}`;inviteStatus.textContent=msg}
+function validEmail(x){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(x)}
+function addPendingVillager(name,role,email){const v=getVillage();if(!v.some(p=>p.email===email)){v.unshift({name,role,email,status:"Invitation pending"});saveVillage(v)}}
+async function sendInvite(){
+ const name=inviteName.value.trim(), email=inviteEmail.value.trim(), role=inviteRole.value, message=inviteMessage.value.trim();
+ if(!name)return setInviteStatus("Please enter the villager’s name.","warn");
+ if(!validEmail(email))return setInviteStatus("Please enter a valid email address.","warn");
+ const token=(crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2));
+ const acceptUrl=`${inviteLinkBase}?token=${encodeURIComponent(token)}&name=${encodeURIComponent(name)}`;
+ const payload={name,email,role,message,accept_url:acceptUrl,token};
+
+ if(API_BASE){
+  try{
+   const r=await fetch(`${API_BASE}/api/invites`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
+   if(r.ok){addPendingVillager(name,role,email);setInviteStatus(`Invitation sent to ${email}.`);maybeNotify("Village invitation sent",`${name} has been invited to your NurtureMom village.`);return}
+  }catch(e){}
+ }
+
+ const subject=encodeURIComponent("You’re invited to my NurtureMom village ♡");
+ const body=encodeURIComponent(`${message}\n\nAccept my invitation:\n${acceptUrl}\n\n— Sent from NurtureMom`);
+ addPendingVillager(name,role,email);
+ if(navigator.share){
+  try{await navigator.share({title:"NurtureMom Village Invitation",text:`${message}\n\n${acceptUrl}`});setInviteStatus(`Invitation prepared for ${name}. Choose Mail to send it.`);return}
+  catch(e){if(e.name==="AbortError")return setInviteStatus("Sharing was cancelled.","warn")}
+ }
+ setInviteStatus(`Opening your email app with the invitation for ${name}…`);
+ location.href=`mailto:${encodeURIComponent(email)}?subject=${subject}&body=${body}`;
+}
+function hideViews(){villageView.classList.add("hidden");settingsView.classList.remove("show");routineView.classList.add("hidden")}
+function goVillage(){hideViews();villageView.classList.remove("hidden");pageTitle.textContent="My Village"}
+function goRoutine(){hideViews();routineView.classList.remove("hidden");pageTitle.textContent="My Care Routine";renderRoutines()}
+function openSettings(){hideViews();settingsView.classList.add("show");pageTitle.textContent="Profile & Settings";updatePushUI()}
+async function togglePush(){
+ if(!("Notification" in window))return alert("Notifications are not supported in this browser.");
+ if(Notification.permission==="granted"){localStorage.setItem("nurturemom_push_enabled",localStorage.getItem("nurturemom_push_enabled")==="1"?"0":"1");updatePushUI();return}
+ const perm=await Notification.requestPermission();localStorage.setItem("nurturemom_push_enabled",perm==="granted"?"1":"0");
+ if(perm==="granted"){await registerSW();await subscribeForBackendPush();sendTestNotification()}updatePushUI()
+}
+function updatePushUI(){
+ const supported="Notification" in window, enabled=supported&&Notification.permission==="granted"&&localStorage.getItem("nurturemom_push_enabled")!=="0";
+ pushSwitch.classList.toggle("on",enabled);
+ pushState.textContent=!supported?"Not supported":Notification.permission==="denied"?"Blocked in browser settings":enabled?"Enabled on this device":"Not enabled"
+}
+async function registerSW(){if("serviceWorker" in navigator){try{return await navigator.serviceWorker.register("sw.js")}catch(e){}}}
+async function subscribeForBackendPush(){
+ if(!window.NURTUREMOM_VAPID_PUBLIC_KEY||!("serviceWorker" in navigator)||!API_BASE)return;
+ try{
+  const reg=await navigator.serviceWorker.ready;let sub=await reg.pushManager.getSubscription();
+  if(!sub)sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:urlBase64ToUint8Array(window.NURTUREMOM_VAPID_PUBLIC_KEY)});
+  await fetch(`${API_BASE}/api/push/subscribe`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(sub)})
+ }catch(e){console.warn(e)}
+}
+function urlBase64ToUint8Array(base64String){const padding='='.repeat((4-base64String.length%4)%4);const base64=(base64String+padding).replace(/-/g,'+').replace(/_/g,'/');const rawData=atob(base64);return Uint8Array.from([...rawData].map(c=>c.charCodeAt(0)))}
+async function sendTestNotification(){if(!("Notification" in window))return alert("Notifications are not supported in this browser.");if(Notification.permission!=="granted"){const p=await Notification.requestPermission();if(p!=="granted")return alert("Notification permission was not granted.")}localStorage.setItem("nurturemom_push_enabled","1");updatePushUI();maybeNotify("NurtureMom ♡","Your village is here when you need it.")}
+async function maybeNotify(title,body){if(!("Notification" in window)||Notification.permission!=="granted")return;try{const reg=await registerSW();if(reg)return reg.showNotification(title,{body,icon:"icon.svg",badge:"icon.svg",tag:"nurturemom"})}catch(e){}new Notification(title,{body})}
+
+const SUPABASE_URL="https://ocorbzbkzfdmurolngdf.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY="sb_publishable_unerunySitlxOS8BLKyboA_z1vNhY5W";
+const CARE_API = window.NURTUREMOM_CARE_API || SUPABASE_URL+"/functions/v1/nm-care-routines";
+let careRoutines=[], nmSupabase=null;
+function authToken(){return window.NURTUREMOM_ACCESS_TOKEN||localStorage.getItem("nurturemom_access_token")||""}
+function setAuthStatus(msg,warn=false){if(!window.authStatus)return;authStatus.textContent=msg;authStatus.className="status show"+(warn?" warn":"")}
+function showAuth(session){const signed=!!session?.user;authSignedOut.style.display=signed?"none":"block";authSignedIn.style.display=signed?"block":"none";authUserEmail.textContent=session?.user?.email||"";if(signed&&window.profileTimezone)profileTimezone.value=Intl.DateTimeFormat().resolvedOptions().timeZone||"UTC"}
+async function initNurtureMomAuth(){
+ try{
+  const mod=await import("https://esm.sh/@supabase/supabase-js@2.116.0");
+  nmSupabase=mod.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+  const {data}=await nmSupabase.auth.getSession();
+  if(data.session){localStorage.setItem("nurturemom_access_token",data.session.access_token);showAuth(data.session);await finishSignedInSetup(data.session)}else{localStorage.removeItem("nurturemom_access_token");showAuth(null)}
+  nmSupabase.auth.onAuthStateChange((_event,session)=>{if(session){localStorage.setItem("nurturemom_access_token",session.access_token);showAuth(session);setTimeout(()=>finishSignedInSetup(session),0)}else{localStorage.removeItem("nurturemom_access_token");showAuth(null)}});
+ }catch(e){console.warn("NurtureMom auth unavailable",e);showAuth(null)}
+}
+async function sendMagicLink(){
+ const email=authEmail.value.trim();if(!validEmail(email))return setAuthStatus("Please enter a valid email address.",true);
+ if(!nmSupabase)return setAuthStatus("Sign-in service is still loading. Please try again.",true);
+ const {error}=await nmSupabase.auth.signInWithOtp({email,options:{emailRedirectTo:location.origin+location.pathname}});
+ if(error)return setAuthStatus("We couldn't send the sign-in link. Please try again.",true);
+ setAuthStatus("Check your email for your secure NurtureMom sign-in link. ♡");
+}
+
+function localRoutineSnapshot(){try{return JSON.parse(localStorage.getItem("nurturemom_routines")||"[]")}catch(e){return []}}
+function routineSignature(r){return [String(r.name||r.title||"").trim().toLowerCase(),String(r.time||r.reminder_time||"").slice(0,5),r.repeat||r.repeat_mode||repeatFromDays(r.repeat_days),String(r.onceDate||r.once_at||"").slice(0,10),String(r.note||"").trim().toLowerCase()].join("|")}
+async function migrateLocalRoutines(session){
+ const key="nurturemom_migrated_"+session.user.id;if(localStorage.getItem(key)==="1")return 0;
+ const local=localRoutineSnapshot();if(!local.length){localStorage.setItem(key,"1");return 0}
+ const remote=await careCall({action:"list"}), seen=new Set((remote.routines||[]).map(routineSignature));let moved=0;
+ for(const r of local){const sig=routineSignature(r);if(seen.has(sig))continue;const repeat=r.repeat||r.repeat_mode||repeatFromDays(r.repeat_days);let once_at=null;if(repeat==="once"){const d=r.onceDate||String(r.once_at||"").slice(0,10);if(!d)continue;const dt=new Date(`${d}T${String(r.time||r.reminder_time||"").slice(0,5)}:00`);if(!Number.isFinite(dt.getTime())||dt<=new Date())continue;once_at=dt.toISOString()}try{await careCall({action:"create",title:r.name||r.title,reminder_time:String(r.time||r.reminder_time||"").slice(0,5),repeat,note:r.note||"",timezone:Intl.DateTimeFormat().resolvedOptions().timeZone||"UTC",once_at});seen.add(sig);moved++}catch(e){console.warn("Routine migration skipped",e)}}
+ localStorage.setItem(key,"1");return moved
+}
+async function loadNurtureMomProfile(session){if(!nmSupabase||!session)return;const {data,error}=await nmSupabase.from("nm_profiles").select("data").eq("id",session.user.id).maybeSingle();if(!error&&data?.data&&window.profileName)profileName.value=data.data.display_name||""}
+async function saveNurtureMomProfile(){if(!nmSupabase)return;const {data:{session}}=await nmSupabase.auth.getSession();if(!session)return;const name=profileName.value.trim();if(!name){profileStatus.textContent="Please enter the name you'd like us to use.";profileStatus.className="status show warn";return}const payload={display_name:name,timezone:Intl.DateTimeFormat().resolvedOptions().timeZone||"UTC",onboarding_completed:true,updated_at:new Date().toISOString()};const {error}=await nmSupabase.from("nm_profiles").upsert({id:session.user.id,data:payload},{onConflict:"id"});profileStatus.textContent=error?"We couldn't save your profile yet. Please try again.":"Profile saved ♡";profileStatus.className="status show"+(error?" warn":"")}
+async function finishSignedInSetup(session){try{await loadNurtureMomProfile(session);const moved=await migrateLocalRoutines(session);await loadRoutines();if(moved)setAuthStatus(`${moved} existing Care Routine${moved===1?"":"s"} moved safely into your account. ♡`)}catch(e){console.warn("Signed-in setup",e);await loadRoutines()}}
+
+async function signOutNurtureMom(){if(nmSupabase)await nmSupabase.auth.signOut();localStorage.removeItem("nurturemom_access_token");careRoutines=[];showAuth(null);renderRoutines()}
+function getRoutines(){return careRoutines.length?careRoutines:(()=>{try{return JSON.parse(localStorage.getItem("nurturemom_routines")||"[]")}catch(e){return []}})()}
+function cacheRoutines(r){careRoutines=r;localStorage.setItem("nurturemom_routines",JSON.stringify(r));renderRoutines()}
+async function careCall(payload){const token=authToken();if(!CARE_API||!token)throw new Error("offline");const r=await fetch(CARE_API,{method:"POST",headers:{"Content-Type":"application/json","Authorization":`Bearer ${token}`},body:JSON.stringify(payload)});if(!r.ok)throw new Error((await r.json().catch(()=>({}))).error||"care_api_error");return r.json()}
+function repeatFromDays(ds){const x=(ds||[]).join(',');if(x==='1,2,3,4,5')return'weekdays';if(x==='0,6')return'weekends';return'daily'}
+function normalizeRoutine(r){return {id:r.id,name:r.title||r.name,time:String(r.reminder_time||r.time||'').slice(0,5),repeat:r.repeat||r.repeat_mode||repeatFromDays(r.repeat_days),onceDate:r.onceDate||String(r.once_at||'').slice(0,10)||'',note:r.note||'',lastStatus:r.lastStatus||'',nextDue:r.next_due_at||null,enabled:r.enabled!==false}}
+async function loadRoutines(){try{const x=await careCall({action:"list"});cacheRoutines((x.routines||[]).map(normalizeRoutine))}catch(e){careRoutines=getRoutines();renderRoutines()}}
+function toggleOnceDate(){onceDateWrap.classList.toggle("hidden",routineRepeat.value!=="once");if(routineRepeat.value==="once"&&!routineDate.value){const d=new Date();d.setDate(d.getDate()+1);routineDate.value=d.toISOString().slice(0,10)}}
+let editingRoutineId=null;
+function openRoutine(){editingRoutineId=null;routineName.value="";routineTime.value="";routineRepeat.value="daily";routineDate.value="";routineNote.value="";if(window.routineSaveBtn)routineSaveBtn.textContent="Save reminder";routineModal.classList.add("open");routineStatus.className="status";toggleOnceDate()}
+function editRoutine(id){const r=getRoutines().find(x=>x.id===id);if(!r)return;editingRoutineId=id;routineName.value=r.name||"";routineTime.value=r.time||"";routineRepeat.value=r.repeat||"daily";routineDate.value=r.onceDate||"";routineNote.value=r.note||"";if(window.routineSaveBtn)routineSaveBtn.textContent="Update reminder";routineModal.classList.add("open");routineStatus.className="status";toggleOnceDate()}
+function closeRoutine(){routineModal.classList.remove("open");editingRoutineId=null;if(window.routineSaveBtn)routineSaveBtn.textContent="Save reminder"}
+function routineBackdropClose(e){if(e.target.id==="routineModal")closeRoutine()}
+function repeatLabel(x){return ({daily:"Every day",weekdays:"Weekdays",weekends:"Weekends",once:"Once"})[x]||"Every day"}
+function routineSubtext(r){if(r.note)return r.note;if(r.repeat==="once"&&r.onceDate){const d=new Date(`${r.onceDate}T12:00:00`);return `Once • ${d.toLocaleDateString([],{month:"short",day:"numeric",year:"numeric"})}`}return repeatLabel(r.repeat)}
+function nextDueText(r){if(!r.enabled)return "Paused";if(r.nextDue){const d=new Date(r.nextDue);if(Number.isFinite(d.getTime()))return `Next: ${d.toLocaleDateString([],{month:"short",day:"numeric"})} at ${d.toLocaleTimeString([],{hour:"numeric",minute:"2-digit"})}`}return r.repeat==="once"&&r.onceDate?`Once • ${new Date(`${r.onceDate}T12:00:00`).toLocaleDateString([],{month:"short",day:"numeric"})}`:repeatLabel(r.repeat)}
+function renderRoutines(){const rs=getRoutines();routineList.innerHTML=rs.length?rs.sort((a,b)=>(a.nextDue||a.time||"").localeCompare(b.nextDue||b.time||"")).map(r=>`<div class="routine-item" style="opacity:${r.enabled?1:.62}"><div class="routine-top"><div><b>${esc(r.name)}</b><div class="small">${esc(routineSubtext(r))}</div><div class="small" style="margin-top:4px;font-weight:700">${esc(nextDueText(r))}</div></div><div class="routine-time">${formatTime(r.time)}</div></div><div class="routine-actions"><button class="btn secondary mini" onclick="editRoutine('${r.id}')">Edit</button><button class="btn secondary mini" onclick="toggleRoutine('${r.id}',${!r.enabled})">${r.enabled?'Pause':'Resume'}</button>${r.enabled?`<button class="btn secondary mini" onclick="markRoutine('${r.id}','taken')">✓ Taken</button><button class="btn secondary mini" onclick="snoozeRoutine('${r.id}')">Snooze 10m</button><button class="btn secondary mini" onclick="markRoutine('${r.id}','skipped')">Skip</button>`:''}<button class="btn secondary mini" onclick="deleteRoutine('${r.id}')">Delete</button></div>${r.lastStatus?`<div class="small" style="margin-top:8px">${esc(r.lastStatus)}</div>`:""}</div>`).join(""):`<div class="empty">No reminders yet.<br>Add something gentle for yourself. ♡</div>`}
+
+function formatTime(x){if(!x)return"";const [h,m]=x.split(":").map(Number);return new Date(2000,0,1,h,m).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"})}
+async function saveRoutine(){const name=routineName.value.trim(),time=routineTime.value,repeat=routineRepeat.value,date=routineDate.value;if(!name){routineStatus.className="status show warn";routineStatus.textContent="Please name your reminder.";return}if(!time){routineStatus.className="status show warn";routineStatus.textContent="Please choose a time.";return}let once_at=null;if(repeat==="once"){if(!date){routineStatus.className="status show warn";routineStatus.textContent="Please choose a date.";return}const dt=new Date(`${date}T${time}:00`);if(!Number.isFinite(dt.getTime())||dt<=new Date()){routineStatus.className="status show warn";routineStatus.textContent="Please choose a future date and time.";return}once_at=dt.toISOString()}const payload={title:name,reminder_time:time,repeat,note:routineNote.value.trim(),timezone:Intl.DateTimeFormat().resolvedOptions().timeZone||"UTC",once_at,enabled:true};if(editingRoutineId)payload.id=editingRoutineId;try{const x=await careCall({action:editingRoutineId?"update":"create",...payload});const nr=normalizeRoutine(x.routine);if(editingRoutineId)careRoutines=careRoutines.map(r=>r.id===editingRoutineId?nr:r);else careRoutines.push(nr);cacheRoutines(careRoutines)}catch(e){let rs=getRoutines();if(editingRoutineId){rs=rs.map(r=>r.id===editingRoutineId?{...r,name,time,repeat,onceDate:repeat==="once"?date:"",note:routineNote.value.trim(),enabled:true}:r)}else rs.push({id:(crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)),name,time,repeat,onceDate:repeat==="once"?date:"",note:routineNote.value.trim(),lastStatus:"",enabled:true});cacheRoutines(rs)}const wasEdit=!!editingRoutineId;closeRoutine();maybeNotify(wasEdit?"Care reminder updated ♡":"Care reminder saved ♡",`${name} • ${formatTime(time)}`)}
+async function toggleRoutine(id,enabled){const r=getRoutines().find(x=>x.id===id);if(!r)return;try{const x=await careCall({action:"toggle",id,enabled});Object.assign(r,normalizeRoutine(x.routine))}catch(e){r.enabled=enabled}cacheRoutines(getRoutines())}
+
+async function markRoutine(id,status){const r=getRoutines().find(x=>x.id===id);if(!r)return;try{await careCall({action:"act",id,routine_action:status})}catch(e){}r.lastStatus=status==="taken"?"Taken today ✓":"Skipped today";cacheRoutines(getRoutines())}
+async function snoozeRoutine(id){const r=getRoutines().find(x=>x.id===id);if(!r)return;try{await careCall({action:"act",id,routine_action:"snoozed"})}catch(e){r.snoozeUntil=Date.now()+10*60*1000}r.lastStatus="Snoozed for 10 minutes";cacheRoutines(getRoutines())}
+async function deleteRoutine(id){try{await careCall({action:"delete",id})}catch(e){}cacheRoutines(getRoutines().filter(x=>x.id!==id))}
+function routineDueToday(r,d){const day=d.getDay(),today=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;return r.repeat==="daily"||(r.repeat==="weekdays"&&day>=1&&day<=5)||(r.repeat==="weekends"&&(day===0||day===6))||(r.repeat==="once"&&r.onceDate===today)}
+function checkCareReminders(){if(CARE_API&&authToken())return;const now=new Date(),key=now.toISOString().slice(0,10);let changed=false;const rs=getRoutines();for(const r of rs){if(r.enabled===false)continue;if(r.snoozeUntil&&Date.now()>=r.snoozeUntil){r.snoozeUntil=0;r.lastFired=key+"-snooze-"+Date.now();maybeNotify("NurtureMom care reminder ♡",r.name+(r.note?` — ${r.note}`:""));changed=true;continue}if(!routineDueToday(r,now))continue;const [h,m]=r.time.split(":").map(Number);if(now.getHours()===h&&now.getMinutes()===m&&r.lastFired!==key){r.lastFired=key;maybeNotify("NurtureMom care reminder ♡",r.name+(r.note?` — ${r.note}`:""));if(r.repeat==="once")r.enabled=false;changed=true}}if(changed)cacheRoutines(rs)}
+
+renderVillage();renderRoutines();initNurtureMomAuth();updatePushUI();registerSW();checkCareReminders();setInterval(checkCareReminders,30000);
+</script>
+</body>
+</html>
