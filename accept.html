@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#7b3f59">
+<title>NurtureMom — Village Invitation</title>
+<style>
+:root{--wine:#7b3f59;--paper:#fffaf6;--ink:#2b2023;--muted:#786c6f;--line:#eadfd9;--rose:#f3e4df}
+*{box-sizing:border-box}body{margin:0;background:#f5eee8;color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}.wrap{max-width:520px;min-height:100vh;margin:0 auto;background:var(--paper);padding:28px 18px}.brand{font:700 24px Georgia,serif;color:var(--wine);margin-bottom:24px}.card{background:white;border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 8px 26px rgba(79,50,58,.10)}h1{font:700 28px Georgia,serif;margin:0 0 8px}.sub{color:var(--muted);line-height:1.5}.detail{margin:18px 0;padding:14px;border-radius:14px;background:var(--rose)}label{display:block;font-weight:700;margin:14px 0 6px}input{width:100%;border:1px solid #ddcfca;border-radius:12px;padding:13px;font:inherit}.btn{width:100%;border:0;border-radius:12px;padding:14px 18px;margin-top:12px;font:inherit;font-weight:700;cursor:pointer}.primary{background:#7b3f59;color:white}.secondary{background:white;color:#7b3f59;border:1px solid var(--line)}.status{display:none;margin-top:14px;padding:12px;border-radius:12px;background:#f3ece8}.status.show{display:block}.warn{color:#8a4d16}.ok{color:#2f7653}.small{font-size:12px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">NurtureMom ♡</div>
+  <div class="card">
+    <h1>You're invited into a village</h1>
+    <p class="sub" id="intro">Loading your invitation…</p>
+    <div class="detail" id="details" style="display:none"></div>
+
+    <div id="signedOut" style="display:none">
+      <p class="sub">Sign in with the same email address that received this invitation.</p>
+      <label for="email">Email</label>
+      <input id="email" type="email" autocomplete="email" placeholder="you@example.com">
+      <button class="btn primary" id="signInBtn">Email me a secure sign-in link</button>
+    </div>
+
+    <div id="signedIn" style="display:none">
+      <p class="small">Signed in as <b id="signedInEmail"></b></p>
+      <button class="btn primary" id="acceptBtn">Accept invitation</button>
+      <button class="btn secondary" id="signOutBtn">Use a different email</button>
+    </div>
+
+    <div id="status" class="status"></div>
+  </div>
+</div>
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.116.0';
+const SUPABASE_URL='https://ocorbzbkzfdmurolngdf.supabase.co';
+const SUPABASE_KEY='sb_publishable_unerunySitlxOS8BLKyboA_z1vNhY5W';
+const supabase=createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+const $=id=>document.getElementById(id);
+const token=new URLSearchParams(location.search).get('token')||'';
+let invite=null;
+const setStatus=(msg,warn=false)=>{status.textContent=msg;status.className=`status show ${warn?'warn':'ok'}`};
+
+async function loadInvite(){
+  if(!token){intro.textContent='This invitation link is missing its secure token.';return setStatus('Ask the sender for a new invitation link.',true)}
+  const {data,error}=await supabase.rpc('nm_invite_preview',{p_token:token});
+  if(error||!data){intro.textContent='This invitation is unavailable.';return setStatus(error?.message||'It may have expired or already been used.',true)}
+  invite=data;
+  intro.textContent=`${data.sender_name||'Someone who cares about you'} invited you to join their NurtureMom village.`;
+  details.style.display='block';
+  details.innerHTML=`<b>${escapeHtml(data.name||'Village member')}</b><br><span class="small">${escapeHtml(data.relationship||'Support person')} · Invitation sent to ${escapeHtml(data.email||'')}</span>`;
+  await refreshAuth();
+}
+function escapeHtml(s){return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+async function refreshAuth(){const {data}=await supabase.auth.getSession();const session=data.session;signedOut.style.display=session?'none':'block';signedIn.style.display=session?'block':'none';signedInEmail.textContent=session?.user?.email||'';if(!session&&invite?.email)email.value=invite.email}
+
+signInBtn.addEventListener('click',async()=>{
+  const value=email.value.trim();if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))return setStatus('Enter a valid email address.',true);
+  const redirect=`${location.origin}${location.pathname}?token=${encodeURIComponent(token)}`;
+  const {error}=await supabase.auth.signInWithOtp({email:value,options:{emailRedirectTo:redirect}});
+  if(error)return setStatus(error.message||'We could not send the sign-in link.',true);
+  setStatus('Check your email for your secure NurtureMom sign-in link. ♡');
+});
+acceptBtn.addEventListener('click',async()=>{
+  acceptBtn.disabled=true;setStatus('Joining the village…');
+  const {error}=await supabase.rpc('nm_accept_invitation',{p_token:token});
+  if(error){acceptBtn.disabled=false;return setStatus(error.message||'We could not accept the invitation.',true)}
+  setStatus('Invitation accepted. Welcome to the village. ♡');
+  setTimeout(()=>location.href='/',1200);
+});
+signOutBtn.addEventListener('click',async()=>{await supabase.auth.signOut();await refreshAuth();setStatus('Signed out. Use the invited email address to continue.');});
+supabase.auth.onAuthStateChange(()=>setTimeout(refreshAuth,0));
+loadInvite();
+</script>
+</body>
+</html>
