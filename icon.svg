@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="NurtureMom logo">
+  <rect width="512" height="512" rx="112" fill="#fffaf6"/>
+  <circle cx="256" cy="256" r="188" fill="#f3e4df"/>
+  <path d="M256 390c-14-20-38-38-67-58-54-37-91-69-91-121 0-43 33-76 76-76 35 0 62 19 82 48 20-29 47-48 82-48 43 0 76 33 76 76 0 52-37 84-91 121-29 20-53 38-67 58z" fill="#7b3f59"/>
+  <circle cx="224" cy="228" r="45" fill="#fffaf6"/>
+  <circle cx="290" cy="265" r="33" fill="#fffaf6"/>
+  <path d="M182 305c19-44 57-69 101-69 39 0 73 19 95 55-27 19-61 42-94 68-38-29-75-52-102-54z" fill="#d8b5b0"/>
+</svg>
