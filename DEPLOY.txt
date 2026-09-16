@@ -1,3 +1,25 @@
-NurtureMom V1 deployment-ready build
+NurtureMom deployment notes
 
-Upload the contents of this folder to the existing NurtureMom web host. index.html is the polished integrated build. Preserve your existing production environment/configuration for notification email/push services.
+Production app: https://mynurturemom.com
+Frontend repository: main branch of this repository
+Backend: Supabase project ocorbzbkzfdmurolngdf
+Cloudflare Worker target: damp-queen-a49b
+
+Automatic deployment
+- Workflow: .github/workflows/deploy-cloudflare.yml
+- Every push to main deploys the repository with Wrangler 4.
+- GitHub repository secrets required:
+  CLOUDFLARE_API_TOKEN
+  CLOUDFLARE_ACCOUNT_ID
+
+Until those two secrets are added, GitHub Pages continues publishing the main branch while the Cloudflare workflow will fail safely before deployment.
+
+Important production files
+- index.html: main app
+- runtime-upgrade.js: profile birth-date preservation, invitation delivery, push registration
+- accept.html: secure village invitation acceptance flow
+- manifest.webmanifest + icon.svg: installable web-app assets
+- sw.js: push notification service worker
+- wrangler.jsonc: Cloudflare static-assets Worker configuration
+
+Do not commit service-role keys, Cloudflare API tokens, Resend keys, or other private secrets to this repository.
