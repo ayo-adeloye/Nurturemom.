@@ -14,6 +14,12 @@ window.addEventListener('DOMContentLoaded', () => {
       const premium = document.createElement('script');
       premium.src = 'premium-checkin.js?v=20260916-1';
       premium.defer = true;
+      premium.onload = () => {
+        const weeklyCare = document.createElement('script');
+        weeklyCare.src = 'weekly-care.js?v=20260916-1';
+        weeklyCare.defer = true;
+        document.body.appendChild(weeklyCare);
+      };
       document.body.appendChild(premium);
     };
     document.body.appendChild(runtime);
