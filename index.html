@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#7b3f59">
 <link rel="manifest" href="manifest.webmanifest">
-<title>NurtureMom — My Village</title>
+<title>NurtureMom — Home</title>
 <style>
 :root{
   --wine:#7b3f59; --rose:#f3e4df; --paper:#fffaf6; --ink:#2b2023;
@@ -53,32 +53,103 @@ textarea{min-height:90px;resize:vertical}
 .switch::after{content:"";position:absolute;width:20px;height:20px;border-radius:50%;background:white;top:3px;left:3px;transition:.2s}
 .switch.on::after{left:23px}
 .pill{display:inline-block;padding:4px 8px;border-radius:999px;background:#edf6f0;color:#2c7b53;font-size:11px}
-.routine.hidden{display:none}.routine-item{padding:14px;border-bottom:1px solid var(--line)}.routine-item:last-child{border-bottom:0}.routine-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.routine-time{font-weight:800;color:var(--wine)}.routine-actions{display:flex;gap:7px;margin-top:10px;flex-wrap:wrap}.mini{padding:8px 10px;border-radius:10px;font-size:12px}.empty{padding:22px;text-align:center;color:var(--muted)}.care-banner{margin:14px;padding:16px;border-radius:16px;background:linear-gradient(135deg,#f8e9e4,#f2ddd7)}
+.view{display:none}.view.show{display:block}.routine.hidden{display:none}.routine-item{padding:14px;border-bottom:1px solid var(--line)}.routine-item:last-child{border-bottom:0}.routine-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.routine-time{font-weight:800;color:var(--wine)}.routine-actions{display:flex;gap:7px;margin-top:10px;flex-wrap:wrap}.mini{padding:8px 10px;border-radius:10px;font-size:12px}.empty{padding:22px;text-align:center;color:var(--muted)}.care-banner{margin:14px;padding:16px;border-radius:16px;background:linear-gradient(135deg,#f8e9e4,#f2ddd7)}
+
+/* V1 visual restoration based on the approved NurtureMom screen */
+body{background:#f4efeb}.app{background:#fffdf9}.topbar{height:94px;padding:0 24px;background:#fffdf9}.topbar .brand{font-size:0}.topbar .brand:before{content:"♡  Nurture";font-family:Georgia,serif;font-size:27px;color:#4f2944}.topbar .brand:after{content:"Mom";font-family:Georgia,serif;font-size:27px;font-style:italic;color:#4f2944}.topbar .iconbtn:first-child{font-size:0}.topbar .iconbtn:first-child:after{content:"♡";font-size:32px;color:#5d3653}.topbar .iconbtn:last-child{background:#f1e4dc;color:#67465b;font-size:0}.topbar .iconbtn:last-child:after{content:"B";font:20px Georgia,serif}
+.connected-strip{height:43px;display:flex;align-items:center;justify-content:center;gap:11px;background:#f4f0ec;color:#74696c;font-size:12px;letter-spacing:.02em}.connected-strip b{font-size:12px;letter-spacing:.18em;font-weight:500}.v1-home{padding:30px 24px 18px}.v1-date{font-size:12px;letter-spacing:.16em;font-weight:700;color:#9b815c}.v1-title{font:40px/1.12 Georgia,serif;color:#57304b;margin:18px 0 12px}.v1-sub{font-size:16px;color:#786d70;margin-bottom:38px}.moment{position:relative;background:#f3e7e6;border-radius:24px;padding:32px 26px 26px;overflow:hidden}.moment-photo{position:absolute;right:0;top:0;width:132px;height:145px;object-fit:cover}.eyebrow{font-size:12px;letter-spacing:.08em;font-weight:800;color:#9a7c55}.moment h2{font:31px/1.15 Georgia,serif;color:#5b324e;margin:22px 115px 14px 0}.moment-copy{color:#7b6e72;margin:0 115px 28px 0}.feeling-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.feeling{min-height:120px;border:1px solid #e4d7d6;border-radius:14px;background:#fbf5f4;color:#675b60;padding:14px 8px}.feeling.selected{border:2px solid #7b4a68;background:#fffaf8}.feeling b{display:block;font-size:24px;font-weight:400;color:#8b7258;margin-bottom:8px}.moment .check-btn{margin-top:20px;background:#70405f;color:white;border:0;border-radius:13px;padding:15px 18px;font-weight:700;font-size:16px}.moment-foot{margin-top:15px;color:#8b7e81;font-size:13px}.need-head,.support-head{display:flex;align-items:center;justify-content:space-between;margin:34px 0 18px}.need-head h2,.support-head h2{font:29px Georgia,serif;color:#4f3047;margin:0}.need-head span,.support-head span{color:#71566a;font-size:13px}.needs{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.need{height:75px;border:1px solid #e8dfdb;border-radius:18px;background:white;color:#6b6064;font-size:15px}.need i{font-style:normal;display:inline-grid;place-items:center;width:34px;height:34px;border-radius:50%;background:#f3e7e4;margin-right:5px}.need:nth-child(2) i,.need:nth-child(4) i{background:#e8efe1}.need:nth-child(3) i,.need:nth-child(6) i{background:#f4edd4}.support-empty{height:150px;border:1px dashed #ddd2cc;border-radius:20px;background:#faf7f3;display:grid;place-items:center;text-align:center;color:#8a7f7b;padding:20px}.support-empty b{display:block;font-size:30px;font-weight:400;margin-bottom:10px}.bottom{height:82px}.nav{font-size:12px}.nav b{font-size:22px}.view,.village,.routine,.settings{padding-top:0}
+
+/* Complete V1 screen system */
+.screen-pad{padding:34px 24px 28px}.screen-title{font:38px/1.12 Georgia,serif;color:#54304a;margin:0 0 10px}.screen-sub{font-size:15px;color:#827579;margin-bottom:26px}.seg-tabs{display:flex;gap:28px;border-bottom:1px solid #e8ded9;margin-bottom:22px}.seg-tab{padding:0 2px 12px;border:0;background:none;color:#918589;font-weight:700}.seg-tab.active{color:#6e3e5d;border-bottom:2px solid #6e3e5d}.soft-card{background:#fff;border:1px solid #e9dfda;border-radius:20px;padding:18px;box-shadow:0 4px 16px rgba(70,45,54,.04)}.section-row{display:flex;justify-content:space-between;align-items:center;margin:28px 0 13px}.section-row h2{font:25px Georgia,serif;color:#513048;margin:0}.section-row span{font-size:13px;color:#76566b}.care-list{padding:0}.care-row{display:grid;grid-template-columns:32px 1fr auto;align-items:center;gap:10px;padding:15px 4px;border-bottom:1px solid #eee5e0}.care-row:last-child{border-bottom:0}.care-check{width:25px;height:25px;border:1.5px solid #b7aaa8;border-radius:50%;display:grid;place-items:center;color:white}.care-check.done{background:#7f9b79;border-color:#7f9b79}.care-row b{display:block;font-size:15px}.care-row small{color:#95898a}.dots{color:#9a8d8f;font-weight:700}.outline-add{width:100%;margin-top:15px;border:1px solid #d8c8cd;border-radius:13px;padding:14px;background:#fff;color:#6d405c;font-weight:700}.resource{display:grid;grid-template-columns:54px 1fr auto;gap:12px;align-items:center;padding:11px 0;border-bottom:1px solid #eee6e1}.resource:last-child{border:0}.resource-thumb{width:54px;height:48px;border-radius:12px;background:linear-gradient(135deg,#ead9d2,#d6c5b7);display:grid;place-items:center;font-size:22px}.resource b{font-size:14px}.resource small{display:block;color:#93878a;margin-top:3px}.invite-main{width:100%;border:0;border-radius:15px;background:#75435f;color:#fff;padding:16px;font-weight:700;margin:4px 0 22px}.village-groups .group-row{display:grid;grid-template-columns:46px 1fr auto;gap:12px;align-items:center;padding:15px 2px;border-bottom:1px solid #eee5e0}.group-icon{width:44px;height:44px;border-radius:50%;background:#f1e4df;display:grid;place-items:center;color:#70445e}.group-row:nth-child(2) .group-icon{background:#e8efe3}.group-row:nth-child(3) .group-icon{background:#f4ecd7}.group-row:nth-child(4) .group-icon{background:#e9e6f1}.pending-box{display:grid;grid-template-columns:44px 1fr auto;gap:12px;align-items:center;background:#f6efec;border-radius:16px;padding:15px;margin-top:18px}.village-quote{text-align:center;padding:34px 18px 5px;color:#77566a;font:19px/1.5 Georgia,serif}.request-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin:18px 0 24px}.request-chip{height:86px;border:1px solid #e6dbd7;background:#fff;border-radius:17px;color:#675c60}.request-chip.selected{border:2px solid #74445f;background:#fbf4f3}.request-chip i{display:block;font-style:normal;font-size:23px;margin-bottom:6px}.request-box{border:1px solid #dfd4d0;border-radius:16px;padding:14px;min-height:110px;background:#fff}.request-meta{margin-top:18px;border-top:1px solid #eee4df}.meta-row{display:grid;grid-template-columns:34px 1fr auto;align-items:center;padding:15px 2px;border-bottom:1px solid #eee4df}.meta-row b{font-size:14px}.meta-row small{display:block;color:#94878a;margin-top:3px}.toggle-ui{width:42px;height:24px;border-radius:99px;background:#74445f;position:relative}.toggle-ui:after{content:'';position:absolute;width:18px;height:18px;background:#fff;border-radius:50%;right:3px;top:3px}.send-request{width:100%;margin-top:20px;background:#75435f;color:white;border:0;border-radius:14px;padding:16px;font-weight:800}.schedule-item{display:grid;grid-template-columns:55px 1fr auto;gap:12px;align-items:center;padding:16px 0;border-bottom:1px solid #eee4df}.schedule-time{font-weight:800;color:#6e405b}.schedule-item small{display:block;color:#94878a;margin-top:3px}.village.hidden,.routine.hidden{display:none!important}.village:not(.hidden),.routine:not(.hidden){display:block}.settings{padding-top:0}
+@media(max-width:380px){.v1-title,.screen-title{font-size:34px}.v1-home,.screen-pad{padding-left:17px;padding-right:17px}.moment{padding-left:18px;padding-right:18px}.moment h2{font-size:27px}.feeling-grid{gap:6px}.feeling{font-size:12px}.request-grid{gap:7px}}
+
 </style>
 </head>
 <body>
 <div class="app">
   <header class="topbar">
-    <button class="iconbtn" onclick="goVillage()">‹</button>
-    <div class="brand" id="pageTitle">My Village</div>
+    <button class="iconbtn" onclick="goHome()">⌂</button>
+    <div class="brand" id="pageTitle">NurtureMom</div>
     <button class="iconbtn" onclick="openSettings()" title="Settings">⚙</button>
   </header>
+  <div class="connected-strip"><b>CONNECTED</b><span>My space</span><span>Refresh</span><span>My villages</span></div>
 
-  <main id="villageView" class="village">
-    <div class="hero"></div>
-    <button class="btn primary full" onclick="openInvite()">＋ Invite Someone</button>
-    <section class="section">
-      <h2>Your Village <span class="small" id="villageCount"></span></h2>
-      <div class="card" id="people"></div>
-    </section>
-    <div class="note">👥 It takes a village.<br><b>Thank you for being part of mine. ♡</b></div>
+  <main id="homeView" class="view show">
+    <div class="v1-home">
+      <div class="v1-date" id="homeDate"></div>
+      <div class="v1-title">A little care for you, <span id="homeName">Baba</span><br>nurture.</div>
+      <div class="v1-sub">You don’t have to do it all today.</div>
+      <section class="moment">
+        <img class="moment-photo" src="nurturemom-mom-baby.jpg" alt="Mother holding her newborn">
+        <div class="eyebrow">YOUR DAILY MOMENT</div>
+        <h2>How are you feeling today?</h2>
+        <p class="moment-copy">Pause. Take a breath. This moment is yours.</p>
+        <div class="feeling-grid">
+          <button class="feeling selected" onclick="chooseFeeling(this,'Doing okay')"><b>☀</b>Doing okay</button>
+          <button class="feeling" onclick="chooseFeeling(this,'Could use some help')"><b>♡</b>Could use some help</button>
+          <button class="feeling" onclick="chooseFeeling(this,'Need support today')"><b>⌁</b>Need support today</button>
+        </div>
+        <button class="check-btn" onclick="saveV1Checkin()">Take my daily check-in&nbsp; →</button>
+        <div class="moment-foot" id="checkinStatus">Just a minute, just for you.</div>
+      </section>
+      <div class="need-head"><h2>What do you need today?</h2><span>It’s okay to ask.</span></div>
+      <div class="needs">
+        <button class="need" onclick="quickRequest('Meal or groceries')"><i>♜</i>Meal</button>
+        <button class="need" onclick="quickRequest('Rest')"><i>◔</i>Rest</button>
+        <button class="need" onclick="quickRequest('Ride or errand')"><i>▣</i>Errand</button>
+        <button class="need" onclick="quickRequest('Ride or errand')"><i>⌁</i>Ride</button>
+        <button class="need" onclick="quickRequest('Baby care')"><i>◉</i>Baby Help</button>
+        <button class="need" onclick="quickRequest('Household help')"><i>⌂</i>House Help</button>
+      </div>
+      <div class="support-head"><h2>Support on its way</h2><span onclick="goRoutine()" style="cursor:pointer">View schedule&nbsp; ›</span></div>
+      <div class="support-empty" id="homeSupport"><div><b>♧</b>No upcoming help yet. Create a request to start.</div></div>
+    </div>
+  </main>
+
+  <main id="recoveryView" class="view">
+    <div class="screen-pad">
+      <h1 class="screen-title">Your recovery matters</h1><div class="screen-sub">Small steps. A healthier, happier you.</div>
+      <div class="seg-tabs"><button class="seg-tab active">Today</button><button class="seg-tab" onclick="goRoutine()">Routines</button><button class="seg-tab">Resources</button></div>
+      <div class="section-row"><h2>Today’s Care</h2><span>Gentle progress</span></div>
+      <div class="soft-card care-list">
+        <div class="care-row"><span class="care-check"></span><div><b>Take prenatal vitamins</b><small>8:00 AM</small></div><span class="dots">•••</span></div>
+        <div class="care-row"><span class="care-check done">✓</span><div><b>Rest for 20 minutes</b><small>11:00 AM</small></div><span class="dots">•••</span></div>
+        <div class="care-row"><span class="care-check"></span><div><b>Drink water</b><small>1:00 PM</small></div><span class="dots">•••</span></div>
+        <div class="care-row"><span class="care-check"></span><div><b>Light stretch</b><small>3:00 PM</small></div><span class="dots">•••</span></div>
+        <div class="care-row"><span class="care-check"></span><div><b>Journal or breathe</b><small>8:00 PM</small></div><span class="dots">•••</span></div>
+        <button class="outline-add" onclick="openRoutine()">＋ Add a routine</button>
+      </div>
+      <div class="section-row"><h2>Helpful resources</h2><span>See all ›</span></div>
+      <div class="soft-card"><div class="resource"><div class="resource-thumb">🌿</div><div><b>Postpartum Recovery Tips</b><small>Gentle guidance for your journey</small></div><span>›</span></div><div class="resource"><div class="resource-thumb">♡</div><div><b>Mental Wellness</b><small>You’re not alone</small></div><span>›</span></div><div class="resource"><div class="resource-thumb">🍲</div><div><b>Nutrition for New Moms</b><small>Fuel your healing</small></div><span>›</span></div></div>
+      <div style="margin-top:22px" class="soft-card"><b>How are you today?</b><label>Energy</label><select id="recoveryEnergy"><option>Good</option><option>Okay</option><option>Low</option><option>Exhausted</option></select><label>Mood</label><select id="recoveryMood"><option>Good</option><option>Okay</option><option>Overwhelmed</option><option>Low</option></select><label>Note</label><textarea id="recoveryNote" placeholder="Anything you want to remember about today..."></textarea><button class="btn primary" style="width:100%;margin-top:12px" onclick="saveRecovery()">Save Check-in</button><div id="recoveryStatus" class="status"></div></div>
+    </div>
+  </main>
+
+  <main id="requestsView" class="view">
+    <div class="screen-pad"><h1 class="screen-title">What do you need help with?</h1><div class="screen-sub">It’s okay to ask. Your village is here for you.</div>
+      <div class="request-grid"><button class="request-chip selected" onclick="selectRequestChip(this,'Meal or groceries')"><i>🍴</i>Meal</button><button class="request-chip" onclick="selectRequestChip(this,'Rest')"><i>☾</i>Rest</button><button class="request-chip" onclick="selectRequestChip(this,'Ride or errand')"><i>▣</i>Errand</button><button class="request-chip" onclick="selectRequestChip(this,'Ride or errand')"><i>🚗</i>Ride</button><button class="request-chip" onclick="selectRequestChip(this,'Baby care')"><i>☺</i>Baby Help</button><button class="request-chip" onclick="selectRequestChip(this,'Household help')"><i>⌂</i>House Help</button></div>
+      <select id="requestType" style="display:none"><option>Meal or groceries</option><option>Rest</option><option>Baby care</option><option>Household help</option><option>Ride or errand</option><option>Someone to check in</option><option>Other</option></select>
+      <textarea class="request-box" id="requestDetails" placeholder="Tell us a little more…
+
+e.g. I need a meal tomorrow evening for my family of 3."></textarea>
+      <div class="request-meta"><div class="meta-row"><span>▣</span><div><b>When do you need this?</b><small>Select date & time</small></div><span>›</span></div><div class="meta-row"><span>⌖</span><div><b>Location</b><small>Add location</small></div><span>›</span></div><div class="meta-row"><span>♧</span><div><b>Share with</b><small>My village</small></div><span>›</span></div><div class="meta-row"><span>♢</span><div><b>Notify me</b><small>Get notified when someone responds</small></div><span class="toggle-ui"></span></div></div>
+      <button class="send-request" onclick="addHelpRequest()">Send request</button><div class="section-row"><h2>My requests</h2></div><div class="soft-card" id="requestList"></div>
+    </div>
+  </main>
+
+  <main id="villageView" class="village hidden">
+    <div class="screen-pad"><h1 class="screen-title">Your village<br>makes a difference</h1><div class="screen-sub">Invite, connect and receive support.</div><button class="invite-main" onclick="openInvite()">♧ &nbsp; Invite to my village</button>
+      <div class="soft-card village-groups"><div class="group-row"><div class="group-icon">♡</div><div><b>Family</b><div class="small">2 members</div></div><span>›</span></div><div class="group-row"><div class="group-icon">♧</div><div><b>Friends</b><div class="small">1 member</div></div><span>›</span></div><div class="group-row"><div class="group-icon">⌂</div><div><b>Neighbors</b><div class="small">0 members</div></div><span>›</span></div><div class="group-row"><div class="group-icon">○</div><div><b>Community</b><div class="small">0 members</div></div><span>›</span></div></div>
+      <div class="pending-box"><div class="group-icon">✉</div><div><b>Pending invitations</b><div class="small" id="villageCount">1 invitation</div></div><span>View ›</span></div>
+      <div class="section-row"><h2>Your people</h2></div><div class="soft-card" id="people"></div><div class="village-quote">♡<br>A village doesn’t just help you survive,<br>it helps you thrive.</div>
+    </div>
   </main>
 
   <main id="routineView" class="routine hidden">
-    <div class="care-banner"><b>♡ My Care Routine</b><div class="small" style="margin-top:5px">Gentle reminders you choose for vitamins, hydration, rest, medication, or anything that supports your day.</div></div>
-    <button class="btn primary full" onclick="openRoutine()">＋ Add a Reminder</button>
-    <section class="section"><h2>Today</h2><div class="card" id="routineList"></div></section>
-    <div class="note">These are personal reminders you create for yourself and are not medical advice.</div>
+    <div class="screen-pad"><h1 class="screen-title">Your care schedule</h1><div class="screen-sub">Stay on track with what matters.</div><div class="seg-tabs"><button class="seg-tab active">Upcoming</button><button class="seg-tab">Completed</button><button class="seg-tab">All</button></div>
+      <div class="section-row"><h2>Upcoming</h2><span>Today & beyond</span></div><div class="soft-card" id="routineList"></div><button class="outline-add" onclick="openRoutine()">＋ Add a reminder</button>
+      <div class="note" style="margin:22px 0 0">These are personal reminders you create for yourself and are not medical advice.</div>
+    </div>
   </main>
 
   <main id="settingsView" class="settings">
@@ -115,11 +186,11 @@ textarea{min-height:90px;resize:vertical}
   </main>
 
   <nav class="bottom">
-    <button class="nav"><b>⌂</b>Home</button>
-    <button class="nav"><b>♡</b>Recovery</button>
-    <button class="nav active" onclick="goVillage()"><b>♧</b>My Village</button>
-    <button class="nav"><b>♡</b>Requests</button>
-    <button class="nav" onclick="goRoutine()"><b>▣</b>My Care</button>
+    <button class="nav active" data-view="home" onclick="goHome()"><b>⌂</b>Home</button>
+    <button class="nav" data-view="recovery" onclick="goRecovery()"><b>♡</b>Recovery</button>
+    <button class="nav" data-view="village" onclick="goVillage()"><b>♧</b>Village</button>
+    <button class="nav" data-view="requests" onclick="goRequests()"><b>♡</b>Requests</button>
+    <button class="nav" data-view="routine" onclick="goRoutine()"><b>▣</b>Schedule</button>
   </nav>
 </div>
 
@@ -169,7 +240,7 @@ function getVillage(){return JSON.parse(localStorage.getItem("nurturemom_village
 function saveVillage(v){localStorage.setItem("nurturemom_village",JSON.stringify(v));renderVillage()}
 function esc(s){return String(s||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]))}
 function renderVillage(){
- const v=getVillage(); villageCount.textContent=`(${v.length})`;
+ const v=getVillage(); if(window.villageCount)villageCount.textContent=`${v.filter(p=>p.status==="Invitation pending").length||1} invitation${(v.filter(p=>p.status==="Invitation pending").length||1)===1?"":"s"}`;
  people.innerHTML=v.map(p=>`<div class="person"><div class="avatar">${esc((p.name||"?").slice(0,1).toUpperCase())}</div><div><div class="name">${esc(p.name)} <span class="small">(${esc(p.role||"Villager")})</span></div><div class="small"><span class="dot">●</span> ${esc(p.status||"Invited")}</div></div><div>•••</div></div>`).join("")
 }
 function openInvite(){inviteModal.classList.add("open")}
@@ -203,10 +274,25 @@ async function sendInvite(){
  setInviteStatus(`Opening your email app with the invitation for ${name}…`);
  location.href=`mailto:${encodeURIComponent(email)}?subject=${subject}&body=${body}`;
 }
-function hideViews(){villageView.classList.add("hidden");settingsView.classList.remove("show");routineView.classList.add("hidden")}
-function goVillage(){hideViews();villageView.classList.remove("hidden");pageTitle.textContent="My Village"}
-function goRoutine(){hideViews();routineView.classList.remove("hidden");pageTitle.textContent="My Care Routine";renderRoutines()}
-function openSettings(){hideViews();settingsView.classList.add("show");pageTitle.textContent="Profile & Settings";updatePushUI()}
+function setActiveNav(view){document.querySelectorAll(".nav").forEach(b=>b.classList.toggle("active",b.dataset.view===view))}
+let selectedFeeling="Doing okay";
+function chooseFeeling(btn,value){selectedFeeling=value;document.querySelectorAll(".feeling").forEach(x=>x.classList.remove("selected"));btn.classList.add("selected")}
+function saveV1Checkin(){localStorage.setItem("nurturemom_daily_checkin",JSON.stringify({feeling:selectedFeeling,at:new Date().toISOString()}));checkinStatus.textContent="Your check-in is saved. ♡"}
+function quickRequest(type){goRequests();if(window.requestType){const opts=[...requestType.options];const hit=opts.find(o=>o.textContent===type);if(hit)requestType.value=hit.value}if(window.requestDetails){const hints={"Meal or groceries":"I could use help with a meal or groceries.","Rest":"I need a little time to rest. Could someone help cover something for me?","Ride or errand":"I could use help with a ride or an errand.","Baby care":"I could use some help with the baby.","Household help":"I could use some help around the house."};requestDetails.value=hints[type]||"";requestDetails.focus()}}
+function hideViews(){homeView.classList.remove("show");recoveryView.classList.remove("show");requestsView.classList.remove("show");villageView.classList.add("hidden");settingsView.classList.remove("show");routineView.classList.add("hidden")}
+function goHome(){hideViews();homeView.classList.add("show");pageTitle.textContent="NurtureMom";setActiveNav("home");renderHome()}
+function goRecovery(){hideViews();recoveryView.classList.add("show");pageTitle.textContent="Recovery";setActiveNav("recovery")}
+function goVillage(){hideViews();villageView.classList.remove("hidden");pageTitle.textContent="My Village";setActiveNav("village");renderVillage()}
+function goRequests(){hideViews();requestsView.classList.add("show");pageTitle.textContent="Requests";setActiveNav("requests");renderRequests()}
+function goRoutine(){hideViews();routineView.classList.remove("hidden");pageTitle.textContent="Schedule";setActiveNav("routine");renderRoutines()}
+function openSettings(){hideViews();settingsView.classList.add("show");pageTitle.textContent="Profile & Settings";document.querySelectorAll(".nav").forEach(b=>b.classList.remove("active"));updatePushUI()}
+function saveCheckin(value){localStorage.setItem("nurturemom_checkin",JSON.stringify({value,date:new Date().toISOString()}));checkinStatus.textContent=`Today's check-in: ${value} ♡`}
+function saveRecovery(){const data={energy:recoveryEnergy.value,mood:recoveryMood.value,note:recoveryNote.value.trim(),date:new Date().toISOString()};localStorage.setItem("nurturemom_recovery_latest",JSON.stringify(data));recoveryStatus.textContent="Today's recovery check-in is saved. ♡";recoveryStatus.className="status show ok"}
+function getHelpRequests(){try{return JSON.parse(localStorage.getItem("nurturemom_help_requests")||"[]")}catch(e){return []}}
+function selectRequestChip(btn,type){document.querySelectorAll('.request-chip').forEach(x=>x.classList.remove('selected'));btn.classList.add('selected');requestType.value=type}
+function addHelpRequest(){const details=requestDetails.value.trim();if(!details)return alert("Please add a few details about what you need.");const rs=getHelpRequests();rs.unshift({id:Date.now(),type:requestType.value,details,status:"Open",created:new Date().toISOString()});localStorage.setItem("nurturemom_help_requests",JSON.stringify(rs));requestDetails.value="";renderRequests();maybeNotify("Help request saved ♡","Your request is ready for your village.")}
+function renderRequests(){const rs=getHelpRequests();requestList.innerHTML=rs.length?rs.map(r=>`<div class="routine-item"><b>${esc(r.type)}</b><div class="small" style="margin-top:4px">${esc(r.details)}</div><div class="pill" style="margin-top:8px">${esc(r.status)}</div></div>`).join(""):`<div class="empty">No open requests yet.<br>Your village is here when you need them. ♡</div>`}
+function renderHome(){const v=getVillage(),rs=getRoutines(),open=getHelpRequests().filter(r=>r.status==="Open");if(window.homeVillageSummary)homeVillageSummary.textContent=`${v.length} people in your support circle`;if(window.homeCareSummary)homeCareSummary.textContent=rs.length?`${rs.filter(r=>r.enabled!==false).length} active care reminder${rs.filter(r=>r.enabled!==false).length===1?"":"s"}`:"No care reminders yet";if(window.homeDate)homeDate.textContent=new Date().toLocaleDateString([],{weekday:"short",month:"short",day:"numeric"}).toUpperCase();const c=JSON.parse(localStorage.getItem("nurturemom_checkin")||"null");checkinStatus.textContent=c?`Latest check-in: ${c.value}`:""}
 async function togglePush(){
  if(!("Notification" in window))return alert("Notifications are not supported in this browser.");
  if(Notification.permission==="granted"){localStorage.setItem("nurturemom_push_enabled",localStorage.getItem("nurturemom_push_enabled")==="1"?"0":"1");updatePushUI();return}
@@ -264,8 +350,8 @@ async function migrateLocalRoutines(session){
  for(const r of local){const sig=routineSignature(r);if(seen.has(sig))continue;const repeat=r.repeat||r.repeat_mode||repeatFromDays(r.repeat_days);let once_at=null;if(repeat==="once"){const d=r.onceDate||String(r.once_at||"").slice(0,10);if(!d)continue;const dt=new Date(`${d}T${String(r.time||r.reminder_time||"").slice(0,5)}:00`);if(!Number.isFinite(dt.getTime())||dt<=new Date())continue;once_at=dt.toISOString()}try{await careCall({action:"create",title:r.name||r.title,reminder_time:String(r.time||r.reminder_time||"").slice(0,5),repeat,note:r.note||"",timezone:Intl.DateTimeFormat().resolvedOptions().timeZone||"UTC",once_at});seen.add(sig);moved++}catch(e){console.warn("Routine migration skipped",e)}}
  localStorage.setItem(key,"1");return moved
 }
-async function loadNurtureMomProfile(session){if(!nmSupabase||!session)return;const {data,error}=await nmSupabase.from("nm_profiles").select("data").eq("id",session.user.id).maybeSingle();if(!error&&data?.data&&window.profileName)profileName.value=data.data.display_name||""}
-async function saveNurtureMomProfile(){if(!nmSupabase)return;const {data:{session}}=await nmSupabase.auth.getSession();if(!session)return;const name=profileName.value.trim();if(!name){profileStatus.textContent="Please enter the name you'd like us to use.";profileStatus.className="status show warn";return}const payload={display_name:name,timezone:Intl.DateTimeFormat().resolvedOptions().timeZone||"UTC",onboarding_completed:true,updated_at:new Date().toISOString()};const {error}=await nmSupabase.from("nm_profiles").upsert({id:session.user.id,data:payload},{onConflict:"id"});profileStatus.textContent=error?"We couldn't save your profile yet. Please try again.":"Profile saved ♡";profileStatus.className="status show"+(error?" warn":"")}
+async function loadNurtureMomProfile(session){if(!nmSupabase||!session)return;const {data,error}=await nmSupabase.from("nm_profiles").select("data").eq("id",session.user.id).maybeSingle();if(!error&&data?.data){const name=data.data.display_name||"";if(window.profileName)profileName.value=name;if(name&&window.homeName)homeName.textContent=name}}
+async function saveNurtureMomProfile(){if(!nmSupabase)return;const {data:{session}}=await nmSupabase.auth.getSession();if(!session)return;const name=profileName.value.trim();if(!name){profileStatus.textContent="Please enter the name you'd like us to use.";profileStatus.className="status show warn";return}const {data:existing}=await nmSupabase.from("nm_profiles").select("data").eq("id",session.user.id).maybeSingle();const payload={...(existing?.data||{}),display_name:name,timezone:Intl.DateTimeFormat().resolvedOptions().timeZone||"UTC",onboarding_completed:true,updated_at:new Date().toISOString()};const {error}=await nmSupabase.from("nm_profiles").upsert({id:session.user.id,data:payload},{onConflict:"id"});if(!error&&window.homeName)homeName.textContent=name;profileStatus.textContent=error?"We couldn't save your profile yet. Please try again.":"Profile saved ♡";profileStatus.className="status show"+(error?" warn":"")}
 async function finishSignedInSetup(session){try{await loadNurtureMomProfile(session);const moved=await migrateLocalRoutines(session);await loadRoutines();if(moved)setAuthStatus(`${moved} existing Care Routine${moved===1?"":"s"} moved safely into your account. ♡`)}catch(e){console.warn("Signed-in setup",e);await loadRoutines()}}
 
 async function signOutNurtureMom(){if(nmSupabase)await nmSupabase.auth.signOut();localStorage.removeItem("nurturemom_access_token");careRoutines=[];showAuth(null);renderRoutines()}
@@ -296,7 +382,7 @@ async function deleteRoutine(id){try{await careCall({action:"delete",id})}catch(
 function routineDueToday(r,d){const day=d.getDay(),today=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;return r.repeat==="daily"||(r.repeat==="weekdays"&&day>=1&&day<=5)||(r.repeat==="weekends"&&(day===0||day===6))||(r.repeat==="once"&&r.onceDate===today)}
 function checkCareReminders(){if(CARE_API&&authToken())return;const now=new Date(),key=now.toISOString().slice(0,10);let changed=false;const rs=getRoutines();for(const r of rs){if(r.enabled===false)continue;if(r.snoozeUntil&&Date.now()>=r.snoozeUntil){r.snoozeUntil=0;r.lastFired=key+"-snooze-"+Date.now();maybeNotify("NurtureMom care reminder ♡",r.name+(r.note?` — ${r.note}`:""));changed=true;continue}if(!routineDueToday(r,now))continue;const [h,m]=r.time.split(":").map(Number);if(now.getHours()===h&&now.getMinutes()===m&&r.lastFired!==key){r.lastFired=key;maybeNotify("NurtureMom care reminder ♡",r.name+(r.note?` — ${r.note}`:""));if(r.repeat==="once")r.enabled=false;changed=true}}if(changed)cacheRoutines(rs)}
 
-renderVillage();renderRoutines();initNurtureMomAuth();updatePushUI();registerSW();checkCareReminders();setInterval(checkCareReminders,30000);
+renderVillage();renderRoutines();renderRequests();goHome();initNurtureMomAuth();updatePushUI();registerSW();checkCareReminders();setInterval(checkCareReminders,30000);
 </script>
 </body>
 </html>
