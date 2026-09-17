@@ -1,0 +1,24 @@
+name: Deploy exact approved NurtureMom preview to Cloudflare
+
+on:
+  push:
+    branches:
+      - approved-plus-exact-preview
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nurturemom-approved-plus-exact-preview
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Deploy exact approved UX preview
+        run: npx wrangler@4 deploy --config wrangler.exact-plus.jsonc --temporary
