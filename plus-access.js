@@ -136,11 +136,13 @@
     const activityDate = payload.date || new Date().toISOString().slice(0, 10);
     try {
       setState({ syncing: true, error: '' });
-      const { error } = await client.from('nm_plus_activity').insert({
+      const { error } = await client.from('nm_plus_activity').upsert({
         user_id: session.user.id,
         kind,
         activity_date: activityDate,
         payload
+      }, {
+        onConflict: 'user_id,kind,activity_date'
       });
       if (error) throw error;
       setState({ syncing: false, lastSyncAt: new Date().toISOString() });
