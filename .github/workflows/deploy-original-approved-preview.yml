@@ -1,0 +1,34 @@
+name: Deploy original approved NurtureMom UX preview
+
+on:
+  push:
+    branches:
+      - original-approved-ux-plus-preview
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nurturemom-original-approved-plus-preview
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Prepare clean preview assets
+        run: |
+          rm -rf public-preview
+          mkdir -p public-preview
+          cp index.html public-preview/index.html
+          cp original-approved-ux.js public-preview/original-approved-ux.js
+          cp plus-access.js public-preview/plus-access.js
+          cp plus-options.js public-preview/plus-options.js
+          cp plus-account-ui.js public-preview/plus-account-ui.js
+
+      - name: Deploy original approved preview
+        run: npx wrangler@4 deploy --config wrangler.original-approved.jsonc --temporary
