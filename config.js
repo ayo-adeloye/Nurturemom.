@@ -18,6 +18,12 @@ window.addEventListener('DOMContentLoaded', () => {
         const weeklyCare = document.createElement('script');
         weeklyCare.src = 'weekly-care.js?v=20260916-1';
         weeklyCare.defer = true;
+        weeklyCare.onload = () => {
+          const companion = document.createElement('script');
+          companion.src = 'ai-companion.js?v=20260917-1';
+          companion.defer = true;
+          document.body.appendChild(companion);
+        };
         document.body.appendChild(weeklyCare);
       };
       document.body.appendChild(premium);
