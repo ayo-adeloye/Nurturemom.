@@ -1,0 +1,12 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "nurturemom-original-approved-plus-preview",
+  "main": "worker-plus.js",
+  "compatibility_date": "2026-09-17",
+  "assets": {
+    "directory": "./public-preview",
+    "binding": "ASSETS",
+    "run_worker_first": true,
+    "not_found_handling": "single-page-application"
+  }
+}
