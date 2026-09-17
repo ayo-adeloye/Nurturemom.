@@ -1,0 +1,40 @@
+name: Deploy NurtureMom beta to Cloudflare
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nurturemom-beta
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Prepare clean beta assets
+        run: |
+          rm -rf public-beta
+          mkdir -p public-beta
+          cp index.html public-beta/index.html
+          cp original-approved-ux.js public-beta/original-approved-ux.js
+          cp plus-access.js public-beta/plus-access.js
+          cp plus-options.js public-beta/plus-options.js
+          cp plus-auto-movement.js public-beta/plus-auto-movement.js
+          cp plus-feedback-lab.js public-beta/plus-feedback-lab.js
+          cp plus-account-ui.js public-beta/plus-account-ui.js
+          cp plus-elegance.js public-beta/plus-elegance.js
+          cp plus-ask-nurturemom.js public-beta/plus-ask-nurturemom.js
+
+      - name: Deploy beta to Cloudflare account
+        uses: cloudflare/wrangler-action@v4
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          wranglerVersion: "4"
+          command: deploy --config wrangler.beta.jsonc
