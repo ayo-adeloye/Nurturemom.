@@ -1,0 +1,24 @@
+name: Deploy NurtureMom Plus preview to Cloudflare
+
+on:
+  push:
+    branches:
+      - approved-plus-preview
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nurturemom-approved-plus-preview
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Deploy temporary Cloudflare Plus preview
+        run: npx wrangler@4 deploy --config wrangler.plus.jsonc --temporary
