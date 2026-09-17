@@ -31,6 +31,7 @@ jobs:
           cp plus-auto-movement.js public-preview/plus-auto-movement.js
           cp plus-feedback-lab.js public-preview/plus-feedback-lab.js
           cp plus-account-ui.js public-preview/plus-account-ui.js
+          cp plus-elegance.js public-preview/plus-elegance.js
 
       - name: Deploy original approved preview
         run: npx wrangler@4 deploy --config wrangler.original-approved.jsonc --temporary
