@@ -1,0 +1,24 @@
+name: Deploy official approved NurtureMom Plus preview to Cloudflare
+
+on:
+  push:
+    branches:
+      - official-approved-plus-preview
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nurturemom-official-approved-plus-preview
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Deploy official approved Plus preview
+        run: npx wrangler@4 deploy --config wrangler.official-plus.jsonc --temporary
