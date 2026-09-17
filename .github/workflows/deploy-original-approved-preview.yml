@@ -28,6 +28,7 @@ jobs:
           cp original-approved-ux.js public-preview/original-approved-ux.js
           cp plus-access.js public-preview/plus-access.js
           cp plus-options.js public-preview/plus-options.js
+          cp plus-auto-movement.js public-preview/plus-auto-movement.js
           cp plus-account-ui.js public-preview/plus-account-ui.js
 
       - name: Deploy original approved preview
