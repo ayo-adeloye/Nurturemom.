@@ -1,0 +1,66 @@
+name: Build NurtureMom Health Connect APK
+
+on:
+  push:
+    branches:
+      - native-health-sync-preview
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android platform
+        run: sdkmanager "platforms;android-35" "build-tools;35.0.0"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+
+      - name: Prepare bundled NurtureMom web app
+        run: |
+          set -e
+          WEB="native/android/app/src/main/assets/www"
+          rm -rf "$WEB"
+          mkdir -p "$WEB"
+          cp index.html "$WEB/index.html"
+          cp original-approved-ux.js "$WEB/original-approved-ux.js"
+          cp plus-access.js "$WEB/plus-access.js"
+          cp plus-options.js "$WEB/plus-options.js"
+          cp plus-account-ui.js "$WEB/plus-account-ui.js"
+          cp native-health-bridge.js "$WEB/native-health-bridge.js"
+          if [ -f plus-motion-tracker.js ]; then cp plus-motion-tracker.js "$WEB/plus-motion-tracker.js"; fi
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('native/android/app/src/main/assets/www/index.html')
+          s=p.read_text()
+          scripts='''<script>window.NURTUREMOM_PLUS_PREVIEW=true;</script>\n<script src="original-approved-ux.js"></script>\n<script src="plus-access.js"></script>\n<script src="plus-options.js"></script>\n<script src="plus-account-ui.js"></script>\n<script src="native-health-bridge.js"></script>\n<script>if(location.protocol!=="file:"&&document.querySelector('script[src="plus-motion-tracker.js"]')===null){}</script>'''
+          s=s.replace('</body>', scripts+'\n</body>')
+          p.write_text(s)
+          PY
+
+      - name: Build debug APK
+        working-directory: native/android
+        run: gradle :app:assembleDebug --stacktrace
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: NurtureMom-HealthConnect-debug
+          path: native/android/app/build/outputs/apk/debug/app-debug.apk
