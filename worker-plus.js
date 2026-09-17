@@ -7,7 +7,7 @@ export default {
       return new HTMLRewriter()
         .on('body', {
           element(element) {
-            element.append('<script src="/plus-options.js"></script>', { html: true });
+            element.append('<script>window.NURTUREMOM_PLUS_PREVIEW=true;</script><script src="/plus-access.js"></script><script src="/plus-options.js"></script><script src="/plus-account-ui.js"></script>', { html: true });
           }
         })
         .transform(response);
