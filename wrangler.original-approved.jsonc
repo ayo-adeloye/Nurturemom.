@@ -3,6 +3,9 @@
   "name": "nurturemom-original-approved-plus-preview",
   "main": "worker-plus.js",
   "compatibility_date": "2026-09-17",
+  "ai": {
+    "binding": "AI"
+  },
   "assets": {
     "directory": "./public-preview",
     "binding": "ASSETS",
