@@ -32,3 +32,18 @@ window.addEventListener('DOMContentLoaded', () => {
   };
   document.body.appendChild(bridge);
 }, { once: true });
+
+// Phase 2 preview modules. These are additive and preserve the approved
+// production runtime while the Care Engine and Find My Circle are tested.
+window.addEventListener('DOMContentLoaded', () => {
+  const careEngine = document.createElement('script');
+  careEngine.src = 'care-engine.js?v=20260918-preview-1';
+  careEngine.defer = true;
+  careEngine.onload = () => {
+    const community = document.createElement('script');
+    community.src = 'community-prototype.js?v=20260918-preview-1';
+    community.defer = true;
+    document.body.appendChild(community);
+  };
+  document.body.appendChild(careEngine);
+}, { once: true });

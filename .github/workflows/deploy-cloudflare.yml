@@ -4,13 +4,14 @@ on:
   push:
     branches:
       - main
+      - phase2-preview
   workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: nurturemom-production
+  group: nurturemom-${{ github.ref_name }}
   cancel-in-progress: true
 
 jobs:
@@ -26,4 +27,4 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           wranglerVersion: "4"
-          command: deploy
+          command: ${{ github.ref_name == 'phase2-preview' && 'deploy --config wrangler.preview.jsonc' || 'deploy' }}
