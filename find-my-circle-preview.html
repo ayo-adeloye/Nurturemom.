@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NurtureMom — Find My Circle Preview</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f2ece7;color:#2b2023;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}.app{max-width:520px;min-height:100vh;margin:0 auto;background:#fffdf9;padding-bottom:36px}.top{height:88px;display:grid;grid-template-columns:42px 1fr 42px;align-items:center;padding:0 22px;border-bottom:1px solid #eadfd9;position:sticky;top:0;background:#fffdf9;z-index:5}.brand{justify-self:center;font:27px Georgia,serif;color:#4f2944}.brand em{font-style:italic}.back,.avatar{border:0;background:none;color:#6d405c;font-size:24px}.avatar{width:40px;height:40px;border-radius:50%;background:#f1e4dc;font:18px Georgia,serif}.wrap{padding:26px 22px}.eyebrow{font-size:11px;letter-spacing:.12em;font-weight:800;color:#9a7c55}.wrap h1{font:40px/1.08 Georgia,serif;color:#57304b;margin:12px 0 10px}.lead{color:#786d70;line-height:1.55;margin:0 0 18px}.privacy{background:#f4efea;border-radius:16px;padding:14px 15px;color:#776b70;font-size:13px;line-height:1.5}.section{margin-top:26px}.section h2{font:25px Georgia,serif;color:#4f3047;margin:0 0 6px}.help{font-size:13px;color:#8a7d81;margin:0 0 14px}.modes{display:grid;gap:10px}.modes button{border:1px solid #e3d7d4;background:#fff;border-radius:16px;padding:15px 16px;text-align:left;color:#5f5158}.modes b,.modes small{display:block}.modes small{color:#94878a;margin-top:4px}.modes button.selected{border:2px solid #74445f;background:#fbf3f4}.topics{display:flex;flex-wrap:wrap;gap:9px}.topics button{border:1px solid #dfd3d1;background:#fff;color:#715d68;border-radius:999px;padding:10px 13px;font-size:13px}.topics button.selected{border-color:#8a5a75;background:#f3e8ec;color:#603b53}.main{width:100%;margin-top:28px;border:0;border-radius:14px;background:#70405f;color:#fff;padding:15px 18px;font-size:16px;font-weight:800}.results{margin-top:30px}.results[hidden]{display:none}.row{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;margin-bottom:8px}.row h2{font:27px Georgia,serif;color:#4f3047;margin:0}.row span{font-size:12px;color:#8f8187}.note{font-size:12px;color:#9a8d91;margin:0 0 14px}.person{display:grid;grid-template-columns:48px 1fr auto;gap:12px;align-items:start;background:#fff;border:1px solid #e9dfda;border-radius:18px;padding:15px;margin-bottom:11px}.person.mentor{background:#faf6ee}.pic{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#f0e3e7;color:#70405f;font:20px Georgia,serif}.stage{color:#9a7c55;font-size:10px;letter-spacing:.08em;font-weight:800}.person h3{font:19px Georgia,serif;color:#4f3047;margin:3px 0 5px}.person p{font-size:12px;line-height:1.45;color:#83767b;margin:0}.connect{border:1px solid #d8c7cf;border-radius:999px;background:#fff;color:#70405f;padding:8px 10px;font-size:11px;font-weight:700}.connect:disabled{color:#687866;background:#eef3ec;border-color:#d7e1d3}.safety{background:#f3efea;border-radius:16px;padding:15px;margin-top:16px}.safety b,.safety span{display:block}.safety b{color:#5b3a4d;margin-bottom:5px}.safety span{font-size:12px;line-height:1.5;color:#85787d}.footer{text-align:center;color:#9a8d91;font-size:11px;margin:28px 0 8px}.pill{display:inline-block;background:#efe8e3;border-radius:999px;padding:6px 10px;margin-bottom:10px;color:#7b6c72;font-size:11px}@media(max-width:390px){.wrap{padding-left:17px;padding-right:17px}.wrap h1{font-size:35px}.person{grid-template-columns:44px 1fr}.connect{grid-column:2;justify-self:start}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top"><button class="back" aria-label="Back">‹</button><div class="brand">Nurture<em>Mom</em></div><button class="avatar">B</button></header>
+<main class="wrap">
+<div class="pill">COMMUNITY PREVIEW</div>
+<div class="eyebrow">MOM-TO-MOM COMMUNITY</div>
+<h1>Find My Circle</h1>
+<p class="lead">Meet mothers who understand this season — and women who have already walked a little farther.</p>
+<div class="privacy">♡ Only broad motherhood stages are shared. Your baby’s exact birth date, recovery notes, AI conversations and private NurtureMom activity stay private.</div>
+
+<section class="section">
+<h2>Who would feel helpful right now?</h2>
+<p class="help">Choose the kind of connection you want. You can change this anytime.</p>
+<div class="modes">
+<button data-mode="same"><b>Moms in my season</b><small>Similar stage with baby — someone who really gets right now</small></button>
+<button data-mode="ahead"><b>Moms a little ahead</b><small>A mom with recent experience who can listen and encourage</small></button>
+<button class="selected" data-mode="mix"><b>A thoughtful mix</b><small>Relatability now + lived experience from a little farther ahead</small></button>
+</div>
+</section>
+
+<section class="section">
+<h2>What would you like your circle to understand?</h2>
+<p class="help">Pick anything that matters to you right now.</p>
+<div class="topics">
+<button class="selected">Feeding</button><button>Sleep</button><button class="selected">Recovery</button><button>Finding myself again</button><button>Gentle movement</button><button>Returning to work</button>
+</div>
+</section>
+
+<button id="show" class="main">Show my circle ♡</button>
+
+<section id="results" class="results" hidden>
+<div class="row"><h2>Your circle preview</h2><span>3 gentle matches</span></div>
+<p class="note">Prototype profiles only — these are not real NurtureMom members yet.</p>
+
+<article class="person">
+<div class="pic">A</div>
+<div><div class="stage">NEWBORN SEASON</div><h3>Amina</h3><p>First-time mom · Feeding, sleep and learning one day at a time.</p></div>
+<button class="connect">Connect</button>
+</article>
+
+<article class="person">
+<div class="pic">J</div>
+<div><div class="stage">A LITTLE AHEAD</div><h3>Jade</h3><p>Finding her rhythm · Recovery, identity and making room for herself again.</p></div>
+<button class="connect">Connect</button>
+</article>
+
+<article class="person mentor">
+<div class="pic">M</div>
+<div><div class="stage">EXPERIENCED MOM</div><h3>Monique</h3><p>Mom of three · Here to listen, encourage and share what helped her through the early months.</p></div>
+<button class="connect">Connect</button>
+</article>
+
+<div class="safety"><b>Your circle, your choice.</b><span>No one can privately message you until you accept a connection. You can block, mute, report or disconnect anytime.</span></div>
+</section>
+<div class="footer">NurtureMom · Find My Circle prototype</div>
+</main>
+</div>
+<script>
+document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-mode]').forEach(x=>x.classList.remove('selected'));b.classList.add('selected')}))
+document.querySelectorAll('.topics button').forEach(b=>b.addEventListener('click',()=>b.classList.toggle('selected')))
+document.getElementById('show').addEventListener('click',()=>{const r=document.getElementById('results');r.hidden=false;r.scrollIntoView({behavior:'smooth',block:'start'})})
+document.querySelectorAll('.connect').forEach(b=>b.addEventListener('click',()=>{b.textContent='Request sent ♡';b.disabled=true}))
+</script>
+</body>
+</html>
