@@ -313,3 +313,16 @@ Latest green Lab QA:
 6. Verify Plus privacy behavior.
 7. Verify weekly care, Little Wins, and weekly letter.
 8. Complete mobile polish.
+
+
+## Cloudflare deployment retry — 2026-09-19
+
+- Approved production candidate remains commit `ecf7e5e898d9f19e478f68c9ffdf93c6d156b786` on `main`.
+- Existing automated QA remains green; no application source changes were made during this deployment retry.
+- Re-ran GitHub Actions workflow **Deploy NurtureMom to Cloudflare**, run `35443666335`, attempt 2.
+- Checkout and Wrangler installation completed successfully.
+- Deployment failed again only at `wrangler deploy` because the NurtureMom repository still does not provide `CLOUDFLARE_API_TOKEN` to the workflow environment.
+- Exact GitHub log error: Wrangler requires `CLOUDFLARE_API_TOKEN` in a non-interactive environment.
+- The workflow also references `CLOUDFLARE_ACCOUNT_ID`; both values should be configured as repository Actions secrets for NurtureMom, using the same Cloudflare account credentials already configured for the HoV repository when appropriate.
+- Do not modify or rebuild the approved UX to resolve this deployment issue; it is a repository credential/configuration blocker, not an app-code failure.
+- Once the Cloudflare secrets exist in the NurtureMom repository, rerun failed workflow run `35443666335` and verify `mynurturemom.com` against commit `ecf7e5e8`.
