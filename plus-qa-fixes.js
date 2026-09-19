@@ -226,6 +226,31 @@
     }
   }, true);
 
+  // ---------- Account plan badge ----------
+  async function renderAccountPlan() {
+    const buttons = Array.from(document.querySelectorAll('.profile-button'));
+    const profileEntry = document.querySelector('.plus-profile-entry');
+    const access = await getPlusAccess(false);
+
+    document.querySelectorAll('.nm-account-plan').forEach(function (el) { el.remove(); });
+    if (!access.has_access) return;
+
+    const label = access.founder_access ? 'NurtureMom Plus · Founder' : 'NurtureMom Plus';
+    buttons.forEach(function (button) {
+      const name = button.querySelector('.profile-name');
+      if (!name) return;
+      const badge = document.createElement('small');
+      badge.className = 'nm-account-plan';
+      badge.textContent = label;
+      name.insertAdjacentElement('afterend', badge);
+    });
+
+    if (profileEntry) {
+      const strong = profileEntry.querySelector('strong');
+      if (strong) strong.textContent = label;
+    }
+  }
+
   // ---------- Voice Moments transport ----------
   const speech = window.speechSynthesis;
   let lastVoiceMoment = null;
@@ -340,6 +365,8 @@
 
   const style = document.createElement('style');
   style.textContent = [
+    '.nm-account-plan{display:block;font-size:10px;font-weight:800;line-height:1.1;color:#7a526a;letter-spacing:.02em}',
+    '.profile-button{position:relative}',
     '.nm-voice-transport{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0 4px}',
     '.nm-voice-transport button{border:1px solid #d8c4c7;background:#fffaf8;color:#6f425c;border-radius:12px;padding:10px 8px;font-weight:700;cursor:pointer}',
     '.nm-voice-transport button:disabled{opacity:.42;cursor:not-allowed}',
@@ -555,6 +582,7 @@
     updateVoiceControls();
     applyWeeklyCare();
     applyWeeklyLetter();
+    renderAccountPlan().catch(function () {});
   }
 
   function scheduleEnhancements() {
