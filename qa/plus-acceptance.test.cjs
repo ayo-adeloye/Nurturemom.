@@ -146,6 +146,26 @@ function setSession(id){
   assert.strictEqual(access.has_access,true);
   assert.strictEqual(access.founder_access,true);
 
+  // Companion preflight must use the signed-in session and preserve Plus enforcement.
+  assert.ok(windowObj.NurtureMomCompanionQA && typeof windowObj.NurtureMomCompanionQA.preflight === 'function');
+  fetchPayload = { has_access:true, plan:'plus', plus_access:true, founder_access:false };
+  let companionCall = 0;
+  context.fetch = windowObj.fetch = async function(url){
+    companionCall += 1;
+    if (String(url).includes('/rest/v1/rpc/nm_plus_access')) {
+      return { ok:true, status:200, async json(){ return fetchPayload; } };
+    }
+    if (String(url).includes('/functions/v1/nm-ai-companion')) {
+      return { ok:true, status:200, async json(){ return { reply:'You are doing enough for this moment.' }; } };
+    }
+    throw new Error('Unexpected QA URL: ' + url);
+  };
+  const companion = await windowObj.NurtureMomCompanionQA.preflight('I need encouragement today.');
+  assert.strictEqual(companion.ok, true);
+  assert.strictEqual(companion.status, 200);
+  assert.ok(/enough/i.test(companion.reply));
+  assert.ok(companionCall >= 2);
+
   // Voice Moments Pause / Resume / Replay must execute real speech controls.
   const qaVoice = windowObj.__NURTUREMOM_QA_TEST__;
   let voiceControl = null;
