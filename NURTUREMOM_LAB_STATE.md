@@ -350,3 +350,20 @@ Latest green Lab QA:
 ### Production source-of-truth rule
 
 Treat commit `b96e1ba34832fc5692b474aba16e5604383c8116` plus the approved NurtureMom Lab state as the current production checkpoint. Do not restore older V1/V5/export snapshots over this build. Future changes should branch from this production state and be recorded in the Lab before and after deployment.
+
+
+## Final stabilized production checkpoint — 2026-09-19
+
+- Production app assets remain the approved NurtureMom build first routed live at commit `b96e1ba34832fc5692b474aba16e5604383c8116`.
+- Deployment-workflow safeguard commit: `ab800be11f09c0a6e63efc6b29f3bbac3dc3ee35`.
+- The Cloudflare workflow now runs only when production web assets, routing/configuration, or the deployment workflow itself changes. Lab/documentation-only commits no longer trigger production redeploys.
+- Final verification deployment run: `35461746108` (run #24) — **success**.
+- Final verified Cloudflare Worker version: `1507c283-b65d-4e78-a2ab-3e3b81001a4c`.
+- Wrangler prepared 57 static assets and reported no changed asset files in this final safeguard deployment.
+- Verified production routes:
+  - `mynurturemom.com/*`
+  - `www.mynurturemom.com/*`
+- Cloudflare Worker: `damp-queen-a49b`.
+- No approved UX, Plus, AI Companion, notification, Voice Moments, or other application feature files were rolled back by the deployment fixes.
+
+**Canonical resume point:** use the current `main` branch with the approved production app state anchored at `b96e1ba34832fc5692b474aba16e5604383c8116`, plus subsequent deployment-only/documentation safeguards through `ab800be11f09c0a6e63efc6b29f3bbac3dc3ee35`. Do not restore older snapshots over this state.
