@@ -145,6 +145,50 @@
     refresh: function () { return getPlusAccess(true); }
   };
 
+  async function companionPreflight(message) {
+    const session = rawSession();
+    if (!session || !session.access_token || !currentUserId()) {
+      return { ok: false, status: 401, error: 'sign_in_required' };
+    }
+
+    const access = await getPlusAccess(true);
+    if (!access.has_access) {
+      return {
+        ok: false,
+        status: access.signed_out ? 401 : 403,
+        error: access.verification_error ? 'access_check_failed' : 'plus_required'
+      };
+    }
+
+    try {
+      const response = await fetch(SUPABASE_URL + '/functions/v1/nm-ai-companion', {
+        method: 'POST',
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: 'Bearer ' + session.access_token,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          messages: [{ role: 'user', content: String(message || 'Please give me one gentle encouraging sentence for today.').slice(0, 1200) }],
+          context: {}
+        })
+      });
+      const data = await response.json().catch(function () { return {}; });
+      return {
+        ok: response.ok && typeof data.reply === 'string' && data.reply.trim().length > 0,
+        status: response.status,
+        error: response.ok ? '' : String(data.error || 'companion_unavailable'),
+        reply: response.ok ? String(data.reply || '').trim() : ''
+      };
+    } catch (error) {
+      return { ok: false, status: 0, error: String(error && error.message || error) };
+    }
+  }
+
+  window.NurtureMomCompanionQA = {
+    preflight: companionPreflight
+  };
+
   let bypassPlusGuard = false;
 
   function isPlusEntryButton(button) {
