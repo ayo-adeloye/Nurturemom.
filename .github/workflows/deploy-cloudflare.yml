@@ -20,6 +20,35 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
 
+      - name: Prepare Cloudflare site
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf cloudflare-site
+          mkdir -p cloudflare-site
+
+          cp -a _next cloudflare-site/_next
+          if [ -d _not-found ]; then
+            cp -a _not-found cloudflare-site/_not-found
+          fi
+
+          find . -maxdepth 1 -type f \( \
+            -name '*.html' -o \
+            -name '*.txt' -o \
+            -name '*.js' -o \
+            -name '*.svg' -o \
+            -name '*.png' -o \
+            -name '*.jpg' -o \
+            -name '*.jpeg' -o \
+            -name '*.webp' -o \
+            -name '*.webmanifest' -o \
+            -name 'CNAME' -o \
+            -name '.nojekyll' \
+          \) ! -name 'DEPLOY.txt' -exec cp -a {} cloudflare-site/ \;
+
+          test -f cloudflare-site/index.html
+          echo "Prepared $(find cloudflare-site -type f | wc -l) static assets for Cloudflare."
+
       - name: Deploy to Cloudflare Workers
         uses: cloudflare/wrangler-action@v4
         with:
