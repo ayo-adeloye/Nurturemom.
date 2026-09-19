@@ -459,3 +459,26 @@ Treat commit `b96e1ba34832fc5692b474aba16e5604383c8116` plus the approved Nurtur
 - Ask NurtureMom is saved but intentionally paused/hidden for now.
 - Smart in-app notification bar is live.
 - Do not restore an older snapshot over this state.
+
+
+## Clean Cloudflare deployment workflow — 2026-09-19
+
+- Fixed the recurring non-fatal Wrangler setup message:
+  - `npm error npx canceled due to missing packages and no YES option`
+- The workflow now:
+  1. sets up Node 22;
+  2. installs `wrangler@4` explicitly;
+  3. prepares the curated Cloudflare static bundle;
+  4. runs the Cloudflare Wrangler action.
+- Workflow fix commit: `53a5fe626e5f7042f198853bf42834705f70b148`.
+- Verification run: `35466337772` (Cloudflare run #29) — **success**.
+- Verification log contained **no** `npx canceled`, `missing packages`, `npm error`, or deployment error lines.
+- Cloudflare action detected and used `Wrangler 4.135.0` successfully.
+- 59 curated static assets prepared.
+- Worker `damp-queen-a49b` deployed successfully.
+- Verified Worker version: `95bcf80c-0e99-44c4-9340-e49177625f05`.
+- Production routes verified:
+  - `mynurturemom.com/*`
+  - `www.mynurturemom.com/*`
+
+**Deployment status:** clean and green. The previous misleading Wrangler setup error is resolved.
