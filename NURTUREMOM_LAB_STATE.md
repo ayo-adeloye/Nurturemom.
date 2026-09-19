@@ -167,6 +167,38 @@ Remaining release blockers after the Lab fixes:
 4. Verify Android/background notifications, accessibility, and final mobile polish.
 5. Enable Supabase leaked-password protection in Auth settings if the project plan supports it.
 
+
+## Founder / Plus acceptance pass — 2026-09-19
+
+Automated Lab acceptance is now green.
+
+Verified on GitHub Actions run `35442088203` against Lab commit `1d046b95ec8514ca161cf8675f95f5f0ad5bdd38`:
+- Plus QA runtime syntax passed.
+- Behavioral Plus acceptance suite passed.
+- Hardening runtime loads before the compiled Next app bundle.
+- Protected Plus feature markers passed.
+- Private Companion and Gentle Steps storage isolation passed for two simulated signed-in users.
+- Free entitlement is denied by the frontend access parser.
+- Plus entitlement is allowed by the frontend access parser.
+- Founder entitlement is allowed by the frontend access parser.
+- Voice Moments Pause, Resume, and Replay behavior passed.
+- Weekly Care adaptation passed against a difficult current-week recovery profile.
+- Weekly Letter personalization passed, including Mom's first name, current-week check-in context, difficult-moment acknowledgement, and Gentle Steps minutes.
+
+Live Supabase backend entitlement verification:
+- Existing Founder/Plus entitlement returned `has_access: true` from the live `nm_plus_access()` RPC.
+- Existing non-entitled/free account returned `has_access: false` from the live `nm_plus_access()` RPC.
+- Current entitlement data contains one Founder/Plus account and one free/non-entitled account, matching the intended access model.
+
+Not yet considered fully end-to-end:
+- Live AI Companion response still requires a real signed-in Plus/Founder browser session because the Edge Function requires a valid user JWT and its server-side OpenAI secret is intentionally not exposed.
+- Cloudflare production deployment is still blocked until the repository has a working `CLOUDFLARE_API_TOKEN` and confirmed `CLOUDFLARE_ACCOUNT_ID`.
+- Android/background notification acceptance and final device accessibility/mobile polish remain outstanding.
+
+Acceptance conclusion:
+- The Lab fixes for entitlement handling, account-scoped private persistence, Voice Moments transport, and weekly personalization have passed automated behavioral QA and live backend entitlement validation.
+- Keep these changes in Lab until the remaining live-session and deployment checks are completed.
+
 ## Next priorities
 
 1. Finish the AI companion using Cloudflare/Supabase only.
