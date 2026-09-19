@@ -35,32 +35,22 @@
     style.id = 'nmNotificationBarStyle';
     style.textContent = `
       #${BAR_ID}{
-        position:sticky;top:0;z-index:90;display:none;
-        align-items:center;gap:10px;width:100%;
-        padding:9px 14px;background:#f6eee9;color:#5b4250;
-        border-bottom:1px solid #e3d5d0;
-        box-shadow:0 2px 8px rgba(73,49,63,.06);
-        font:500 13px/1.35 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+        position:fixed;top:14px;right:14px;z-index:90;display:none;
+        width:42px;height:42px;padding:0;border:1px solid #e3d5d0;border-radius:50%;
+        background:#fffaf8;color:#69485d;box-shadow:0 4px 16px rgba(73,49,63,.12);
+        cursor:pointer;align-items:center;justify-content:center;
       }
       #${BAR_ID}[data-visible="true"]{display:flex}
-      #${BAR_ID} .nm-notify-icon{
-        display:grid;place-items:center;flex:0 0 auto;width:29px;height:29px;
-        border-radius:50%;background:#fff9f6;font-size:15px
+      #${BAR_ID} .nm-notify-icon{font-size:19px;line-height:1}
+      #${BAR_ID} .nm-notify-copy,#${BAR_ID} .nm-notify-action{display:none}
+      #${BAR_ID} .nm-notify-badge{
+        position:absolute;top:-4px;right:-4px;min-width:18px;height:18px;padding:0 4px;
+        border-radius:999px;background:#7a526a;color:white;border:2px solid #fffaf8;
+        display:none;align-items:center;justify-content:center;
+        font:700 10px/1 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
       }
-      #${BAR_ID} .nm-notify-copy{min-width:0;flex:1}
-      #${BAR_ID} .nm-notify-copy strong{display:block;font-size:12px;letter-spacing:.01em;color:#69485d}
-      #${BAR_ID} .nm-notify-copy span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-      #${BAR_ID} .nm-notify-action{
-        flex:0 0 auto;border:0;background:transparent;color:#7a526a;
-        font:700 12px/1 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-        padding:8px 4px;cursor:pointer
-      }
-      #${BAR_ID}[data-state="active"] .nm-notify-icon{background:#efe2dc}
-      #${BAR_ID}[data-state="attention"]{background:#fff5e9;color:#654b39;border-bottom-color:#ead7bd}
-      @media(max-width:560px){
-        #${BAR_ID}{padding:8px 10px;gap:8px}
-        #${BAR_ID} .nm-notify-copy span{font-size:12px}
-      }
+      #${BAR_ID}[data-count]:not([data-count="0"]) .nm-notify-badge{display:flex}
+      @media(max-width:560px){#${BAR_ID}{top:10px;right:10px;width:38px;height:38px}}
     `;
     document.head.appendChild(style);
   }
@@ -69,28 +59,16 @@
     installStyle();
     let bar = document.getElementById(BAR_ID);
     if (bar) return bar;
-
-    bar = document.createElement('div');
+    bar = document.createElement('button');
     bar.id = BAR_ID;
-    bar.setAttribute('role', 'status');
-    bar.setAttribute('aria-live', 'polite');
-    bar.innerHTML = `
-      <span class="nm-notify-icon" aria-hidden="true">♡</span>
-      <span class="nm-notify-copy">
-        <strong>Notifications</strong>
-        <span class="nm-notify-message"></span>
-      </span>
-      <button class="nm-notify-action" type="button">Profile</button>
-    `;
-    document.body.insertBefore(bar, document.body.firstChild);
-
-    bar.querySelector('.nm-notify-action').addEventListener('click', () => {
-      const candidates = [...document.querySelectorAll('button, a, [role="button"]')];
-      const target = candidates.find((el) => /^profile$/i.test(String(el.textContent || '').trim()))
-        || candidates.find((el) => /profile|account/i.test(String(el.getAttribute('aria-label') || '')));
-      if (target && typeof target.click === 'function') target.click();
+    bar.type = 'button';
+    bar.setAttribute('aria-label', 'Notifications');
+    bar.innerHTML = `<span class="nm-notify-icon" aria-hidden="true">♧</span><span class="nm-notify-badge" aria-hidden="true">1</span><span class="nm-notify-copy"><span class="nm-notify-message"></span></span>`;
+    document.body.appendChild(bar);
+    bar.addEventListener('click', () => {
+      const info = temporary || statusMessage();
+      alert(info.message);
     });
-
     return bar;
   }
 
@@ -136,6 +114,10 @@
     const message = bar.querySelector('.nm-notify-message');
     if (message && message.textContent !== info.message) message.textContent = info.message;
     bar.dataset.state = info.state || 'quiet';
+    const unread = info.state === 'attention' || temporary ? 1 : 0;
+    bar.dataset.count = String(unread);
+    const badge = bar.querySelector('.nm-notify-badge');
+    if (badge) badge.textContent = unread > 9 ? '9+' : String(unread);
     bar.dataset.visible = 'true';
   }
 
