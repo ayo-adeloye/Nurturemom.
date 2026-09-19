@@ -111,6 +111,17 @@ Verified against the latest committed app state before this QA-note update:
 - GitHub Pages successfully published commit `4d314c9`, but the Cloudflare deployment for that same commit failed in the Wrangler step because `CLOUDFLARE_API_TOKEN` was not available to the workflow. Cloudflare production parity with `4d314c9` is therefore not verified.
 - The Supabase AI endpoint still needs an end-to-end signed-in Plus test to prove a real reply rather than `companion_not_configured` or another backend error.
 
+
+### Supabase QA findings — 2026-09-19
+
+- Supabase project `ocorbzbkzfdmurolngdf` is ACTIVE_HEALTHY.
+- `nm-ai-companion` is ACTIVE at version 4 with JWT verification enabled.
+- `nm_plus_access()` reads the signed-in user's row in `nm_entitlements` and returns plan, Plus access, Founder access, and a combined `has_access` flag.
+- RLS is enabled on the core entitlement/profile/recovery/member/request tables reviewed. The entitlement read policy is scoped to the signed-in user's own row; recovery/profile policies are owner-scoped.
+- A live companion reply is still not proven because the current tools do not expose whether `OPENAI_API_KEY` is present and no signed-in Plus session was exercised during this QA pass.
+- Supabase Security Advisor currently reports hardening items that require review: leaked-password protection is disabled; two RLS-enabled internal tables (`nm_deliveries`, `nm_notification_config`) have no policies; and several `SECURITY DEFINER` RPCs are executable by authenticated users. Some RPC exposure may be intentional because their bodies enforce ownership/access checks, so review individually rather than treating every warning as a defect.
+- `nm_invite_preview(p_token text)` is also flagged as anon-executable `SECURITY DEFINER`; confirm that the token-only preview behavior is intentionally public and returns only minimal invitation metadata.
+
 Current release blockers, in order:
 1. Restore Cloudflare deployment credentials and prove production is serving the intended commit.
 2. Verify/implement Plus and Founder entitlement gating across the entire Plus hub.
