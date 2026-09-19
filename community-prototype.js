@@ -296,11 +296,12 @@
 
   function boot() {
     installStyles();
-    const observer = new MutationObserver(render);
-    observer.observe(document.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ['data-nm-plus'] });
     window.addEventListener('hashchange', render);
     window.addEventListener('nurturemom:session-changed', render);
+    document.addEventListener('click', () => setTimeout(render, 120), { passive: true });
     render();
+    setTimeout(render, 500);
+    setTimeout(render, 1500);
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
