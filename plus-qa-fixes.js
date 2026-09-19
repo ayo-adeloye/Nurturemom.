@@ -591,17 +591,22 @@
     requestAnimationFrame(applyEnhancements);
   }
 
-  const observer = new MutationObserver(scheduleEnhancements);
-  observer.observe(document.documentElement, { childList: true, subtree: true });
-
+  window.addEventListener('hashchange', scheduleEnhancements);
   window.addEventListener('nurturemom:session-changed', function () {
     accessCache = { userId: '', at: 0, value: null };
     scheduleEnhancements();
+    setTimeout(scheduleEnhancements, 350);
   });
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', scheduleEnhancements, { once: true });
+    document.addEventListener('DOMContentLoaded', function () {
+      scheduleEnhancements();
+      setTimeout(scheduleEnhancements, 500);
+      setTimeout(scheduleEnhancements, 1400);
+    }, { once: true });
   } else {
     scheduleEnhancements();
+    setTimeout(scheduleEnhancements, 500);
+    setTimeout(scheduleEnhancements, 1400);
   }
 })();
