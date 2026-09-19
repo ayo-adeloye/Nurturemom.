@@ -24,6 +24,9 @@ jobs:
       - name: Check Plus QA runtime syntax
         run: node --check plus-qa-fixes.js
 
+      - name: Run Plus behavioral acceptance tests
+        run: node qa/plus-acceptance.test.cjs
+
       - name: Verify hardening loads before the app bundle
         run: |
           node - <<'NODE'
