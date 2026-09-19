@@ -107,7 +107,7 @@ vm.createContext(context);
 let source = fs.readFileSync('plus-qa-fixes.js','utf8');
 source = source.replace(
   /\}\)\(\);\s*$/,
-  'window.__NURTUREMOM_QA_TEST__={weeklyRecommendations,weeklyLetterParts};})();'
+  'window.__NURTUREMOM_QA_TEST__={weeklyRecommendations,weeklyLetterParts,ensureVoiceControls,updateVoiceControls};})();'
 );
 vm.runInContext(source, context, { filename:'plus-qa-fixes.js' });
 
@@ -145,6 +145,65 @@ function setSession(id){
   access = await windowObj.NurtureMomPlusAccess.refresh();
   assert.strictEqual(access.has_access,true);
   assert.strictEqual(access.founder_access,true);
+
+  // Voice Moments Pause / Resume / Replay must execute real speech controls.
+  const qaVoice = windowObj.__NURTUREMOM_QA_TEST__;
+  let voiceControl = null;
+  const transportParent = element('section');
+  const privacyParagraph = element('p');
+  privacyParagraph.textContent = 'Pause or stop anytime';
+  privacyParagraph.parentNode = transportParent;
+
+  document.querySelectorAll = function(selector){
+    if (selector === 'h1,h2,h3') return [{ textContent:'NurtureMom Voice Moments' }];
+    if (selector === 'p') return [privacyParagraph];
+    return [];
+  };
+  document.getElementById = function(id){
+    return id === 'nmVoiceTransport' ? voiceControl : null;
+  };
+  document.createElement = function(tag){
+    const el = element(tag);
+    if (tag === 'div') {
+      const buttons = {};
+      Object.defineProperty(el, 'innerHTML', {
+        set(value){
+          this._innerHTML = value;
+          ['pause','resume','replay'].forEach(action => {
+            buttons[action] = {
+              disabled:false,
+              getAttribute(name){ return name === 'data-nm-voice' ? action : null; }
+            };
+          });
+        },
+        get(){ return this._innerHTML || ''; }
+      });
+      el.querySelector = function(selector){
+        const match = selector.match(/data-nm-voice="(pause|resume|replay)"/);
+        return match ? buttons[match[1]] : null;
+      };
+      el.addEventListener = function(type, cb){ if (type === 'click') this._clickHandler = cb; };
+      voiceControl = el;
+    }
+    return el;
+  };
+
+  const utterance = new context.SpeechSynthesisUtterance('You are cared for.');
+  speechSynthesis.speaking = false;
+  speechSynthesis.paused = false;
+  speechSynthesis.speak(utterance);
+  assert.ok(voiceControl, 'Voice transport should be created when a Voice Moment plays');
+
+  speechSynthesis.speaking = true;
+  voiceControl._clickHandler({ target:{ closest(){ return { getAttribute(){ return 'pause'; } }; } } });
+  assert.strictEqual(speechSynthesis.paused, true);
+
+  voiceControl._clickHandler({ target:{ closest(){ return { getAttribute(){ return 'resume'; } }; } } });
+  assert.strictEqual(speechSynthesis.paused, false);
+
+  speechSynthesis.speaking = false;
+  voiceControl._clickHandler({ target:{ closest(){ return { getAttribute(){ return 'replay'; } }; } } });
+  assert.strictEqual(speechSynthesis.speaking, true);
 
   // Weekly care must adapt to difficult weeks.
   const qa = windowObj.__NURTUREMOM_QA_TEST__;
