@@ -5,5 +5,15 @@
   "assets": {
     "directory": "./cloudflare-site",
     "not_found_handling": "single-page-application"
-  }
+  },
+  "routes": [
+    {
+      "pattern": "mynurturemom.com/*",
+      "zone_name": "mynurturemom.com"
+    },
+    {
+      "pattern": "www.mynurturemom.com/*",
+      "zone_name": "mynurturemom.com"
+    }
+  ]
 }
