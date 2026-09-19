@@ -367,3 +367,35 @@ Treat commit `b96e1ba34832fc5692b474aba16e5604383c8116` plus the approved Nurtur
 - No approved UX, Plus, AI Companion, notification, Voice Moments, or other application feature files were rolled back by the deployment fixes.
 
 **Canonical resume point:** use the current `main` branch with the approved production app state anchored at `b96e1ba34832fc5692b474aba16e5604383c8116`, plus subsequent deployment-only/documentation safeguards through `ab800be11f09c0a6e63efc6b29f3bbac3dc3ee35`. Do not restore older snapshots over this state.
+
+
+## Ask NurtureMom paused — 2026-09-19
+
+- **Status:** Ask NurtureMom is intentionally hidden from the live app for now.
+- The companion work was **not deleted**.
+- Saved source remains in:
+  - compiled Plus experience
+  - `ai-companion.js`
+  - Supabase Edge Function `nm-ai-companion`
+  - existing QA coverage and companion storage logic
+- Production pause implementation:
+  - commit `8b703547b932b95ea712217846f2a6d07b1356d4`
+  - added `feature-pause.js`
+  - `index.html` now loads the pause layer before the app bundle
+- The pause layer hides:
+  - the **Ask NurtureMom ♡** hero button
+  - the **Private Companion / Ask NurtureMom** Plus card
+  - the companion dialog if it is ever rendered
+  - companion wording in the Plus profile summary
+- NurtureMom Plus remains active with the other approved features such as care plans, Gentle Steps, Little Wins, Voice Moments, weekly care, and related Plus experiences.
+- No Supabase Edge Function was deleted and no AI companion code was removed, so the feature can be restored later by removing the pause layer and re-enabling its entry points.
+- Successful Cloudflare production deployment:
+  - workflow run `35462745672` (run #25)
+  - Worker `damp-queen-a49b`
+  - Worker version `3ed75e98-4557-4d2a-a025-44adfcec67d8`
+  - 58 curated static assets deployed
+  - production routes verified:
+    - `mynurturemom.com/*`
+    - `www.mynurturemom.com/*`
+
+**Current product decision:** Keep Ask NurtureMom saved but paused until the AI provider/cost/privacy approach is revisited.
