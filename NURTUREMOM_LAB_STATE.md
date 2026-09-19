@@ -482,3 +482,31 @@ Treat commit `b96e1ba34832fc5692b474aba16e5604383c8116` plus the approved Nurtur
   - `www.mynurturemom.com/*`
 
 **Deployment status:** clean and green. The previous misleading Wrangler setup error is resolved.
+
+
+## Find My Circle community preview live — 2026-09-19
+
+- **Status:** The saved NurtureMom Plus Mom-to-Mom Community / Find My Circle prototype is now deployed to production as a clearly labeled Plus preview.
+- Production integration commit: `cd31d7efcefbc3763334bc1aad770b2a58a6ac41`.
+- The current production integration uses the real `window.NurtureMomPlusAccess` entitlement API rather than the older preview-only body marker.
+- Free/signed-out accounts do not receive the community card.
+- Plus/Founder accounts can open the **Find My Circle** preview from the existing Plus benefits experience.
+- The preview preserves the three approved matching directions:
+  - **Moms in my season**
+  - **Moms who’ve been here**
+  - **A thoughtful mix of both**
+- Matching choices use broad motherhood stages only; exact baby birth dates are not displayed.
+- Mom can choose themes including feeding, recovery, tired nights, identity, walking, working motherhood, and limited nearby family support.
+- The live preview clearly states that **no real members are being matched yet**.
+- No public social feed, private messaging backend, real member discovery, or community profile database has been claimed as complete.
+- Community remains separate from Recovery, My Village, private check-ins, exact location, and the paused Ask NurtureMom feature.
+- Required before a real member launch: verified adult accounts, community consent/profile storage, server-side matching, mutual-consent connection requests/private messaging, block/report controls, moderation queues, and safety escalation.
+- Cloudflare production workflow run: `35468318907` (run #30) — **success**.
+- Curated production bundle: **60 static assets**.
+- Worker: `damp-queen-a49b`.
+- Verified Worker version: `2228d6a1-7be2-4f3c-af05-d71e812fbfb1`.
+- Production routes verified:
+  - `mynurturemom.com/*`
+  - `www.mynurturemom.com/*`
+
+**Next community phase:** build the real community backend and trust/safety controls behind this approved preview rather than redesigning the preview from scratch.
