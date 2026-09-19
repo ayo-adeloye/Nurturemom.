@@ -92,6 +92,7 @@
       .nm-circle-tags{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0}
       .nm-circle-tag{padding:5px 9px;border-radius:999px;background:#fff;color:#69704e;font-size:11px;font-weight:800;border:1px solid #dedfcf}
       .nm-circle-safety{font-size:11px;color:#8a747d;line-height:1.45;margin-top:12px}
+      .nm-community-nav svg{stroke:currentColor}
     `;
     document.head.appendChild(style);
   }
@@ -228,6 +229,43 @@
     result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 
+  function replaceText(node, from, to) {
+    for (const child of node.childNodes) {
+      if (child.nodeType === Node.TEXT_NODE && child.textContent.trim() === from) {
+        child.textContent = child.textContent.replace(from, to);
+      } else if (child.nodeType === Node.ELEMENT_NODE) {
+        replaceText(child, from, to);
+      }
+    }
+  }
+
+  async function injectCommunityNav() {
+    if (!(await plusActive())) {
+      document.querySelectorAll('.nm-community-nav').forEach((el) => el.remove());
+      return;
+    }
+    const schedules = [...document.querySelectorAll('button,a')].filter((el) => el.textContent.trim() === 'Schedule');
+    for (const schedule of schedules) {
+      const parent = schedule.parentElement;
+      if (!parent) continue;
+      const labels = [...parent.querySelectorAll('button,a')].map((el) => el.textContent.trim());
+      if (!labels.includes('Home') || !labels.includes('Recovery')) continue;
+      if (parent.querySelector('.nm-community-nav')) continue;
+      const item = schedule.cloneNode(true);
+      item.classList.add('nm-community-nav');
+      item.removeAttribute('href');
+      item.setAttribute('type', 'button');
+      item.setAttribute('aria-label', 'Community');
+      replaceText(item, 'Schedule', 'Community');
+      item.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        openCircle();
+      });
+      schedule.insertAdjacentElement('afterend', item);
+    }
+  }
+
   async function injectCard() {
     if (!(await plusActive())) {
       document.getElementById('nmFindCircleCard')?.remove();
@@ -253,7 +291,7 @@
 
   function render() {
     clearTimeout(renderTimer);
-    renderTimer = setTimeout(() => { injectCard().catch(() => {}); }, 90);
+    renderTimer = setTimeout(() => { injectCard().catch(() => {}); injectCommunityNav().catch(() => {}); }, 90);
   }
 
   function boot() {
