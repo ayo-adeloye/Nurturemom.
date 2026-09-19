@@ -409,3 +409,23 @@ Treat commit `b96e1ba34832fc5692b474aba16e5604383c8116` plus the approved Nurtur
 - Plus features should unlock within the same signed-in account experience.
 - The ordinary account/profile remains the single source of identity and settings; Plus only changes entitlement, feature access, and account labeling.
 - Future UX changes should avoid presenting Plus as a disconnected account area.
+
+
+## Plus account UX live checkpoint — 2026-09-19
+
+- **Product rule confirmed in production:** Plus is a status/entitlement on the mother's existing NurtureMom account, not a separate account.
+- Plus/founder members now see **Plus account** in the existing profile/account experience.
+- Supporting account copy now states: **Your Plus benefits are active on this account**.
+- The Plus benefits area remains accessible from that same account and is presented as **Your Plus benefits**, not as a separate account identity.
+- No separate Plus login, duplicate profile, or duplicate account record was introduced.
+- Ask NurtureMom remains intentionally paused and hidden; its code and Supabase Edge Function remain saved for future reactivation.
+- Production implementation commit: `b7d1a4f703c8f9a0f09be3be543efdff69e67bb9`.
+- Cloudflare production workflow run: `35465862094` (run #26) — **success**.
+- Worker: `damp-queen-a49b`.
+- Verified Cloudflare Worker version: `2a251e9c-5d08-4014-8e8f-db633ca48bcf`.
+- Deployment prepared 58 static assets and uploaded the one changed production asset.
+- Production routes verified:
+  - `mynurturemom.com/*`
+  - `www.mynurturemom.com/*`
+
+**Canonical account UX rule:** one NurtureMom account per mother. Plus changes the account label and unlocks benefits; it does not create a second account experience.
