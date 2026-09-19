@@ -1,0 +1,57 @@
+name: NurtureMom Lab QA
+
+on:
+  push:
+    branches:
+      - lab
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  static-qa:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Lab
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Check Plus QA runtime syntax
+        run: node --check plus-qa-fixes.js
+
+      - name: Verify hardening loads before the app bundle
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const html = fs.readFileSync('index.html', 'utf8');
+          const guard = html.indexOf('/plus-qa-fixes.js');
+          const app = html.indexOf('/_next/static/chunks/app/');
+          if (guard < 0) throw new Error('plus-qa-fixes.js is not loaded by index.html');
+          if (app < 0) throw new Error('compiled NurtureMom app bundle was not found');
+          if (guard > app) throw new Error('Plus QA runtime must load before the compiled app');
+          console.log('Lab runtime ordering verified.');
+          NODE
+
+      - name: Verify protected feature markers
+        run: |
+          node - <<'NODE'
+          const fs = require('fs');
+          const js = fs.readFileSync('plus-qa-fixes.js', 'utf8');
+          const required = [
+            'nm_plus_access',
+            'nurturemom.private.companion.v1',
+            'nurturemom.gentle.steps.v1',
+            'data-nm-voice="pause"',
+            'data-nm-voice="resume"',
+            'Your gentle care plan',
+            'weekly-letter'
+          ];
+          const missing = required.filter((item) => !js.includes(item));
+          if (missing.length) throw new Error('Missing QA markers: ' + missing.join(', '));
+          console.log('Protected Plus markers verified.');
+          NODE
