@@ -399,3 +399,13 @@ Treat commit `b96e1ba34832fc5692b474aba16e5604383c8116` plus the approved Nurtur
     - `www.mynurturemom.com/*`
 
 **Current product decision:** Keep Ask NurtureMom saved but paused until the AI provider/cost/privacy approach is revisited.
+
+
+## Plus account model — 2026-09-19
+
+- **Product rule:** NurtureMom Plus is an entitlement/status on the mother's existing account, not a separate account or separate identity.
+- A signed-in mother with active Plus/founder entitlement should simply see her account identified as **Plus account**.
+- Do not create a separate Plus login, separate Plus account record, or duplicate profile flow.
+- Plus features should unlock within the same signed-in account experience.
+- The ordinary account/profile remains the single source of identity and settings; Plus only changes entitlement, feature access, and account labeling.
+- Future UX changes should avoid presenting Plus as a disconnected account area.
