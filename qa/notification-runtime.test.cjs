@@ -155,7 +155,7 @@ function response(body, status=200){
   vm.createContext(context);
   vm.runInContext(fs.readFileSync('notification-runtime.js','utf8'),context,{filename:'notification-runtime.js'});
 
-  await new Promise(r=>setTimeout(r,80));
+  await new Promise(r=>setTimeout(r,260));
 
   assert.ok(calls.some(c=>c.type==='sw-register' && c.path==='/sw.js'));
   assert.ok(calls.some(c=>c.type==='fetch' && c.url.includes('/functions/v1/nm-notifications') && c.body.action==='config'));
