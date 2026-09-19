@@ -4,6 +4,25 @@ on:
   push:
     branches:
       - main
+    paths:
+      - "index.html"
+      - "404.html"
+      - "_not-found.html"
+      - "accept.html"
+      - "*.txt"
+      - "*.js"
+      - "*.svg"
+      - "*.png"
+      - "*.jpg"
+      - "*.jpeg"
+      - "*.webp"
+      - "*.webmanifest"
+      - "CNAME"
+      - ".nojekyll"
+      - "_next/**"
+      - "_not-found/**"
+      - "wrangler.jsonc"
+      - ".github/workflows/deploy-cloudflare.yml"
   workflow_dispatch:
 
 permissions:
