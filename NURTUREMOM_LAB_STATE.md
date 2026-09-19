@@ -303,6 +303,17 @@ Latest green Lab QA:
 - Notification runtime behavioral acceptance: passed
 - Runtime ordering and protected markers: passed
 
+
+## Production deployment attempt — 2026-09-19
+
+- Promoted the tested Lab commit `ecf7e5e898d9f19e478f68c9ffdf93c6d156b786` to `main` successfully.
+- GitHub Pages build/deployment run `35443665171` completed successfully for that commit.
+- Cloudflare deployment run `35443666335` failed during Wrangler deployment.
+- Confirmed failure reason: `CLOUDFLARE_API_TOKEN` is not available to the GitHub Actions environment.
+- Production Cloudflare Worker `damp-queen-a49b` was therefore not updated by this deployment attempt.
+- The repository's Cloudflare workflow expects both `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` repository secrets.
+- Do not place either secret in source code or chat. Add them only through the repository's Actions secrets configuration.
+
 ## Next priorities
 
 1. Finish the AI companion using Cloudflare/Supabase only.
