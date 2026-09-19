@@ -259,7 +259,8 @@
     const nativeSpeak = speech.speak.bind(speech);
     const nativeCancel = speech.cancel.bind(speech);
 
-    speech.speak = function (utterance) {
+    try {
+      speech.speak = function (utterance) {
       if (voiceMomentViewVisible() && utterance) {
         lastVoiceMoment = {
           text: String(utterance.text || ''),
@@ -282,11 +283,15 @@
       return result;
     };
 
-    speech.cancel = function () {
-      const result = nativeCancel();
-      setTimeout(updateVoiceControls, 20);
-      return result;
-    };
+      speech.cancel = function () {
+        const result = nativeCancel();
+        setTimeout(updateVoiceControls, 20);
+        return result;
+      };
+    } catch (_) {
+      // Some embedded browsers expose non-writable speech methods. Voice playback still works;
+      // the transport enhancement simply stays unavailable on those browsers.
+    }
   }
 
   const style = document.createElement('style');
