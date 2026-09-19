@@ -199,6 +199,83 @@ Acceptance conclusion:
 - The Lab fixes for entitlement handling, account-scoped private persistence, Voice Moments transport, and weekly personalization have passed automated behavioral QA and live backend entitlement validation.
 - Keep these changes in Lab until the remaining live-session and deployment checks are completed.
 
+
+## AI Companion + background notification acceptance — 2026-09-19
+
+### AI Companion live E2E
+
+A protected synthetic-account QA Edge Function was deployed as `nm-ai-e2e-qa` version 2 and its exact source is saved in Lab at:
+- `supabase/functions/nm-ai-e2e-qa/index.ts`
+
+The test:
+1. Creates a temporary confirmed QA mom account.
+2. Signs in through Supabase Auth and obtains a real user JWT.
+3. Confirms a free user receives `plus_required`.
+4. Grants Plus and calls the real `nm-ai-companion` Edge Function.
+5. When possible, switches the same QA user to Founder access and calls the companion again.
+6. Deletes the temporary user and all QA data in `finally`.
+
+Live result:
+- ✅ Authenticated QA sign-in works.
+- ✅ Free account is denied by the real companion endpoint.
+- ✅ Plus entitlement reaches the AI-provider stage.
+- ❌ The current blocker is specifically `OPENAI_API_KEY` missing from Supabase Edge Function secrets.
+- The live function returns `companion_not_configured`, surfaced by QA as `openai_secret_missing`.
+- Founder AI reply cannot complete until the same missing secret is configured.
+- Cleanup verified: 0 leftover QA users, 0 leftover QA push devices, and 0 leftover QA care routines.
+
+Current Supabase documentation confirms production Edge Function secrets are added through the Edge Function Secrets page (or `supabase secrets set`), and secrets are available immediately without redeploying the function.
+
+### Background notifications
+
+The previous compiled NurtureMom app only requested browser notification permission and scheduled reminders with an in-page timer. The shipped UI explicitly stated reminders worked only while the app was open.
+
+Lab now contains a real background push runtime:
+- `notification-runtime.js`
+- loaded before the compiled app by `index.html`
+- `sw.js` upgraded for background push display and notification-click focus/navigation
+- visible notification copy updated from "while the app is open" to background-capable wording
+
+The runtime now:
+- registers `/sw.js`
+- retrieves the live VAPID public key from `nm-notifications`
+- registers the signed-in device through `nm_push_register`
+- removes the device through `nm_push_remove`
+- creates/updates/disables a daily `nm-care-routines` reminder using the mom's selected reminder time and browser timezone
+- keeps the push subscription when daily reminders are off so Village push events can still work when device notifications remain enabled
+- unsubscribes the browser push endpoint when device notifications are turned off or the session is removed
+- refreshes an expired Supabase session before background-sync calls when a refresh token is available
+
+Live Supabase notification E2E passed:
+- ✅ authenticated VAPID configuration
+- ✅ push registration persistence
+- ✅ push removal
+- ✅ authenticated Care Routine creation and deletion
+- ✅ notification worker cron remains active every minute
+- ✅ care-reminder notification click route corrected from the invalid `#Care Routine` route to `#Recovery`
+- `nm-notifications` is now ACTIVE version 5
+- exact deployed source is saved in Lab at `supabase/functions/nm-notifications/index.ts`
+
+GitHub Lab QA:
+- Run `35443304035` passed after correcting the test debounce timing.
+- Notification runtime syntax passed.
+- Notification browser-runtime behavioral acceptance passed.
+- Existing Plus behavioral acceptance remained green.
+- Runtime ordering and protected feature-marker checks remained green.
+- Later Lab runs after saving the Supabase function sources also remained green.
+
+What is still not fully device-verified:
+- A real Android device must still confirm a push arrives while NurtureMom is backgrounded/closed and that tapping it opens the expected screen.
+- This is now a physical-device acceptance check, not a missing backend/runtime implementation.
+
+### Remaining blockers after this pass
+
+1. Add `OPENAI_API_KEY` to Supabase Edge Function Secrets, then rerun `nm-ai-e2e-qa` to prove both Plus and Founder receive live companion replies.
+2. Perform one real Android background/cold-start push delivery acceptance check.
+3. Restore GitHub Cloudflare deployment credentials (`CLOUDFLARE_API_TOKEN` and confirm `CLOUDFLARE_ACCOUNT_ID`) and deploy the approved Lab build.
+4. Complete final accessibility/mobile polish acceptance.
+5. Enable Supabase leaked-password protection if the project plan supports it.
+
 ## Next priorities
 
 1. Finish the AI companion using Cloudflare/Supabase only.
