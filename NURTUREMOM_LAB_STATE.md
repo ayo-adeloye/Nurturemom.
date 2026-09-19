@@ -66,6 +66,18 @@ Keep:
   - Hands-free friendly use for feeding, pumping, holding baby, or resting.
   - Voice content remains private and is never shared with the Village unless the mom explicitly chooses to share something.
   - Keep voice interactions supportive and wellness-focused, not diagnostic or emergency care.
+- NurtureMom Voice Moments
+  - A separate on-demand audio encouragement experience for NurtureMom Plus.
+  - 5 minutes — “I need a lift”: short, warm encouragement.
+  - 10 minutes — “Stay with me”: reassurance for loneliness, overwhelm, feeding, resting, or winding down.
+  - 15 minutes — “Pour into me”: deeper nurturing focused on encouragement, self-worth, rest, hope, and feeling cared for.
+  - Mom can pause, resume, replay, or leave at any time with no completion pressure.
+  - Voice direction: soothing, comforting, reassuring, gentle, emotionally present, and motivating without being pushy or clinical.
+  - Baby may provide context, but Mom remains the focus. Messages should recognize she may be nursing, feeding, rocking, changing, holding, or caring for her baby without turning the message into baby advice.
+  - Messages should refresh and personalize over time, rotating themes and avoiding near-duplicates.
+  - Intended entry points: Plus home, A Little Something for Mom, 2 A.M./middle-of-the-night care, after a difficult check-in, after a completed walk/recovery activity, and an optional “I need encouragement” button.
+  - Voice Moments can surface through “Care for right now” and adapt to recovery stage, sleep, energy, meals, mood, and support needs.
+  - Private Companion conversations are excluded from Voice Moments personalization unless Mom explicitly opts in.
 - Future Mom Community concept
 - Future telehealth/consultation concept
 
@@ -84,8 +96,9 @@ Maintain the warm, elegant, premium motherhood aesthetic and realistic mother/ba
 
 1. Finish the AI companion using Cloudflare/Supabase only.
 2. Add Voice Support for Moms to the Plus companion flow.
-3. Verify signed-in Plus access end-to-end.
-4. Verify Gentle Steps persistence.
-5. Verify Plus privacy behavior.
-6. Verify weekly care, Little Wins, and weekly letter.
-7. Complete mobile polish.
+3. Restore and finish NurtureMom Voice Moments as the separate encouragement-audio feature.
+4. Verify signed-in Plus access end-to-end.
+5. Verify Gentle Steps persistence.
+6. Verify Plus privacy behavior.
+7. Verify weekly care, Little Wins, and weekly letter.
+8. Complete mobile polish.
