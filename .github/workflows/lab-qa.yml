@@ -27,6 +27,12 @@ jobs:
       - name: Run Plus behavioral acceptance tests
         run: node qa/plus-acceptance.test.cjs
 
+      - name: Check notification runtime syntax
+        run: node --check notification-runtime.js
+
+      - name: Run notification runtime acceptance tests
+        run: node qa/notification-runtime.test.cjs
+
       - name: Verify hardening loads before the app bundle
         run: |
           node - <<'NODE'
