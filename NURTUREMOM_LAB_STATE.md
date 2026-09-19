@@ -1,6 +1,6 @@
 # NurtureMom Lab — Canonical Working State
 
-Last updated: 2026-09-18
+Last updated: 2026-09-19
 
 ## Canonical workflow
 
@@ -29,7 +29,11 @@ NurtureMom does NOT use AppDeploy.
 
 ## Current source baseline
 
-Lab was created from:
+Current canonical Lab head:
+- `4d314c9f26ad2b49c67ab33e48d0a0caaae0731d` — Rebuild and validate NurtureMom Voice Moments
+- Verified on 2026-09-19: `lab` and `main` were identical at this commit before this QA-note update.
+
+Lab was originally created from:
 - `b38ba99c5c93ba84f63fce062e5ab4ad1480a4e2` — Refresh NurtureMom Plus runtime after QA fixes
 
 Approved UX restoration:
@@ -91,6 +95,30 @@ Lock these five core screens unless explicitly changed:
 - Schedule
 
 Maintain the warm, elegant, premium motherhood aesthetic and realistic mother/baby imagery.
+
+
+## QA continuation — 2026-09-19
+
+Verified against the latest committed app state before this QA-note update:
+- The approved five-screen UX remains the protected baseline.
+- The current app bundle contains the Plus hub, private companion, Weekly Care, Gentle Steps, Little Wins, Weekly Letter, A Little Something for Mom, and Voice Moments.
+- Voice Moments currently offers 5/10/15-minute browser speech playback and a Stop control.
+- Pause and Resume controls are not implemented in the current shipped bundle, despite being part of the approved Voice Moments behavior.
+- Plus entitlement is enforced by the companion backend response (`plus_required`), but the shipped frontend bundle does not contain a visible `nm_plus_access`/Founder entitlement check for the rest of the Plus hub. Treat hub-wide entitlement gating as release-blocking until verified or implemented.
+- Companion history and Gentle Steps use device-local keys (`nurturemom.private.companion.v1` and `nurturemom.gentle.steps.v1`) that are not user-scoped. Treat cross-account/shared-device privacy and persistence as release-blocking until fixed and retested.
+- The shipped Weekly Care screen currently shows static weekly invitations. The Weekly Letter uses name/check-in/movement state, but it is not yet a genuinely week-specific, rotating personalized letter. Keep weekly personalization as incomplete.
+- `index.html` loads the compiled Next app bundle directly. Standalone helper files such as `ai-companion.js`, `weekly-care.js`, and `premium-checkin.js` are not referenced by the shipped index and must not be assumed to represent current production behavior.
+- GitHub Pages successfully published commit `4d314c9`, but the Cloudflare deployment for that same commit failed in the Wrangler step because `CLOUDFLARE_API_TOKEN` was not available to the workflow. Cloudflare production parity with `4d314c9` is therefore not verified.
+- The Supabase AI endpoint still needs an end-to-end signed-in Plus test to prove a real reply rather than `companion_not_configured` or another backend error.
+
+Current release blockers, in order:
+1. Restore Cloudflare deployment credentials and prove production is serving the intended commit.
+2. Verify/implement Plus and Founder entitlement gating across the entire Plus hub.
+3. User-scope or server-scope private companion and Gentle Steps persistence; retest shared-device privacy.
+4. Add Voice Moments pause/resume behavior and retest all 5/10/15-minute flows.
+5. Make Weekly Care and Weekly Letter genuinely adaptive to the current week and user data.
+6. Prove the live Supabase AI companion response for a signed-in Plus/Founder account.
+7. Finish Android/background notification verification, accessibility, mobile polish, and final acceptance testing.
 
 ## Next priorities
 
