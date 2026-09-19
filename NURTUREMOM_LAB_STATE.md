@@ -429,3 +429,33 @@ Treat commit `b96e1ba34832fc5692b474aba16e5604383c8116` plus the approved Nurtur
   - `www.mynurturemom.com/*`
 
 **Canonical account UX rule:** one NurtureMom account per mother. Plus changes the account label and unlocks benefits; it does not create a second account experience.
+
+
+## Smart notification bar live checkpoint — 2026-09-19
+
+- Added a reusable in-app **Notifications** bar for signed-in mothers.
+- The bar is part of the same NurtureMom account experience and does not create a separate notification page or account.
+- Current behavior:
+  - hidden when no mother is signed in;
+  - shows **Gentle reminders are on** and the configured daily check-in time when reminders + device notifications are active;
+  - shows an attention state when a daily reminder exists but device notifications still need to be enabled;
+  - otherwise shows that the mother is caught up and reminds her that gentle reminders can be enabled from Profile.
+- The bar includes a Profile action and is exposed through `window.NurtureMomNotificationBar` so future in-app alerts can reuse the same surface.
+- New production asset: `notification-bar.js`.
+- Loader commit: `8442c9137820cf16f4904a536edeba60cff69796`.
+- Cloudflare production workflow run: `35466069023` (run #28) — **success**.
+- Worker: `damp-queen-a49b`.
+- Verified Cloudflare Worker version: `2bdd88de-708c-4b61-b044-a73744a50dfa`.
+- Deployment prepared 59 curated static assets and uploaded the two changed assets.
+- Production routes verified:
+  - `mynurturemom.com/*`
+  - `www.mynurturemom.com/*`
+
+### Current canonical product state
+
+- One NurtureMom account per mother.
+- Plus is an entitlement/status on that same account and displays as **Plus account**.
+- Plus benefits remain available from the same account experience.
+- Ask NurtureMom is saved but intentionally paused/hidden for now.
+- Smart in-app notification bar is live.
+- Do not restore an older snapshot over this state.
