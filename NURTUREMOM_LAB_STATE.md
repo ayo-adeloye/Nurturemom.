@@ -326,3 +326,27 @@ Latest green Lab QA:
 - The workflow also references `CLOUDFLARE_ACCOUNT_ID`; both values should be configured as repository Actions secrets for NurtureMom, using the same Cloudflare account credentials already configured for the HoV repository when appropriate.
 - Do not modify or rebuild the approved UX to resolve this deployment issue; it is a repository credential/configuration blocker, not an app-code failure.
 - Once the Cloudflare secrets exist in the NurtureMom repository, rerun failed workflow run `35443666335` and verify `mynurturemom.com` against commit `ecf7e5e8`.
+
+
+## Production deployment checkpoint — 2026-09-19
+
+- **Status: LIVE on Cloudflare production.**
+- Production source branch: `main`.
+- Approved app baseline before deployment packaging changes: `ecf7e5e898d9f19e478f68c9ffdf93c6d156b786`.
+- Cloudflare packaging fix commit: `943c315655612e4839c33f05993c69758934e902`.
+- Final custom-domain routing commit: `b96e1ba34832fc5692b474aba16e5604383c8116`.
+- GitHub Actions workflow: **Deploy NurtureMom to Cloudflare**.
+- Successful production run: `35461535571` (run #22).
+- Cloudflare Worker: `damp-queen-a49b`.
+- Cloudflare Worker production version: `e905e362-492c-49e5-8534-e5778a2407b2`.
+- Static deployment package prepared **57 assets** and excludes repository tooling such as `node_modules`, QA sources, Supabase function sources, and repository metadata.
+- Production routes successfully deployed:
+  - `mynurturemom.com/*`
+  - `www.mynurturemom.com/*`
+- The earlier 25 MiB asset failure was resolved by deploying only the curated `cloudflare-site` static bundle instead of the repository root.
+- `CLOUDFLARE_API_TOKEN` is now being received correctly by the GitHub workflow.
+- No approved NurtureMom UX/Plus feature work was rolled back during this deployment fix.
+
+### Production source-of-truth rule
+
+Treat commit `b96e1ba34832fc5692b474aba16e5604383c8116` plus the approved NurtureMom Lab state as the current production checkpoint. Do not restore older V1/V5/export snapshots over this build. Future changes should branch from this production state and be recorded in the Lab before and after deployment.
