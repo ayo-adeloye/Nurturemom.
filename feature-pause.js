@@ -14,6 +14,26 @@
     return String(value || '').replace(/\s+/g, ' ').trim();
   }
 
+  function normalizePlusAccount() {
+    document.querySelectorAll('.plus-profile-entry').forEach((entry) => {
+      const strong = entry.querySelector('strong');
+      const small = entry.querySelector('small');
+      if (strong && /NurtureMom Plus|Plus account/i.test(normalize(strong.textContent))) {
+        strong.textContent = 'Plus account';
+      }
+      if (small) {
+        small.textContent = 'Your Plus benefits are active on this account';
+      }
+      entry.setAttribute('aria-label', 'Open Plus benefits for this account');
+    });
+
+    document.querySelectorAll('h1, h2, [data-slot="dialog-title"]').forEach((el) => {
+      if (normalize(el.textContent) === 'NurtureMom Plus') {
+        el.textContent = 'Your Plus benefits';
+      }
+    });
+  }
+
   function hideAskNurtureMom() {
     document.querySelectorAll('button, a, [role="button"]').forEach((el) => {
       const text = normalize(el.textContent);
@@ -38,13 +58,18 @@
     });
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', hideAskNurtureMom, { once: true });
-  } else {
+  function applyProductState() {
+    normalizePlusAccount();
     hideAskNurtureMom();
   }
 
-  const observer = new MutationObserver(hideAskNurtureMom);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', applyProductState, { once: true });
+  } else {
+    applyProductState();
+  }
+
+  const observer = new MutationObserver(applyProductState);
   observer.observe(document.documentElement, { childList: true, subtree: true });
 
   window.NurtureMomPausedFeatures = Object.freeze({
