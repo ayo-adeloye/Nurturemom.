@@ -59,6 +59,13 @@ Keep:
 - Little Wins
 - Personalized weekly care letter
 - A Little Something for Mom
+- Voice Support for Moms
+  - Voice-to-text inside Ask NurtureMom so moms can speak instead of type.
+  - Optional spoken AI replies / read-aloud mode.
+  - Gentle voice check-ins for mood, recovery, hydration, sleep, movement, and support needs.
+  - Hands-free friendly use for feeding, pumping, holding baby, or resting.
+  - Voice content remains private and is never shared with the Village unless the mom explicitly chooses to share something.
+  - Keep voice interactions supportive and wellness-focused, not diagnostic or emergency care.
 - Future Mom Community concept
 - Future telehealth/consultation concept
 
@@ -76,8 +83,9 @@ Maintain the warm, elegant, premium motherhood aesthetic and realistic mother/ba
 ## Next priorities
 
 1. Finish the AI companion using Cloudflare/Supabase only.
-2. Verify signed-in Plus access end-to-end.
-3. Verify Gentle Steps persistence.
-4. Verify Plus privacy behavior.
-5. Verify weekly care, Little Wins, and weekly letter.
-6. Complete mobile polish.
+2. Add Voice Support for Moms to the Plus companion flow.
+3. Verify signed-in Plus access end-to-end.
+4. Verify Gentle Steps persistence.
+5. Verify Plus privacy behavior.
+6. Verify weekly care, Little Wins, and weekly letter.
+7. Complete mobile polish.
