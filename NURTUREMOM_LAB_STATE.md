@@ -131,6 +131,42 @@ Current release blockers, in order:
 6. Prove the live Supabase AI companion response for a signed-in Plus/Founder account.
 7. Finish Android/background notification verification, accessibility, mobile polish, and final acceptance testing.
 
+
+## Plus concern fixes implemented in Lab — 2026-09-19
+
+Implemented without changing the approved five-screen UX:
+- Plus/Founder entry gating now checks the live Supabase `nm_plus_access` RPC before opening the Plus hub.
+- Private Companion history and Gentle Steps local persistence are now scoped to the signed-in user ID. Unscoped legacy values are no longer read by the app, preventing one account from inheriting another account's private local data.
+- Account-switch detection reloads the app when a different signed-in user replaces the current session, preventing private in-memory Plus state from carrying across accounts.
+- Voice Moments now adds Pause, Resume, and Replay transport controls around the existing browser speech experience. The enhancement fails safely on embedded browsers that expose non-writable speech methods.
+- Weekly Care recommendations now adapt to the current week's available recovery data (rest, support, meals, hydration, discomfort) instead of always showing the same three invitations.
+- The Weekly Letter now reflects current-week check-ins, week-over-week rest/support trends when available, Gentle Steps activity, and a rotating weekly closing.
+- The hardening runtime is loaded before the compiled Next app via `index.html`, so private-storage scoping is active before the app reads Companion or Gentle Steps data.
+
+Lab implementation commits:
+- `b5ab3cd1a528c5db357f316cf309f55535a7b48f` — Add NurtureMom Plus QA runtime hardening
+- `bed56b45305ba6e797434385273e808379cacffd` — Load Plus QA hardening before NurtureMom app
+- `7e35021c154f135203f487d5b234bbb828ce3df4` — Harden Voice Moments controls for embedded browsers
+- `197da79bf122bbf84c6c9e6a08421655c73adcf2` — Add automated Lab QA checks
+
+Validation status:
+- These fixes are committed on `lab` only and are not promoted to `main` or Cloudflare production yet.
+- The Lab-only GitHub Actions QA workflow has not started a run, so automated syntax/runtime ordering is not yet marked passed.
+- End-to-end acceptance still needs: Founder access, Plus access, free-account denial, shared-device account switch, all three Voice Moment lengths, weekly content with/without check-ins, and a live AI reply.
+
+Backend security review:
+- Core Plus entitlement/profile/recovery tables remain RLS-enabled and owner-scoped.
+- `nm_deliveries` is intentionally client-denied by RLS and is used as an internal delivery queue through controlled functions/triggers; its no-policy advisor notice is informational rather than a reason to expose it.
+- The public `nm_invite_preview` SECURITY DEFINER RPC is intentionally usable before sign-in via a high-entropy invitation token and returns invitation metadata. Keep this design under periodic review because it includes the invited email address.
+- Supabase leaked-password protection remains disabled. Current Supabase documentation says this setting is configured in Auth settings and is available on Pro Plan and above. The current connector does not expose the Auth-config write needed to enable it.
+
+Remaining release blockers after the Lab fixes:
+1. Get a successful Lab acceptance pass for the new runtime behavior.
+2. Restore the GitHub `CLOUDFLARE_API_TOKEN` (and confirm `CLOUDFLARE_ACCOUNT_ID`) so Cloudflare deployment can succeed.
+3. Prove a live signed-in Plus/Founder AI companion response; the Edge Function is active but its server secret cannot be inspected with the current connector.
+4. Verify Android/background notifications, accessibility, and final mobile polish.
+5. Enable Supabase leaked-password protection in Auth settings if the project plan supports it.
+
 ## Next priorities
 
 1. Finish the AI companion using Cloudflare/Supabase only.
