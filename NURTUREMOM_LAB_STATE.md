@@ -276,6 +276,33 @@ What is still not fully device-verified:
 4. Complete final accessibility/mobile polish acceptance.
 5. Enable Supabase leaked-password protection if the project plan supports it.
 
+
+## AI Companion + notification acceptance continuation — 2026-09-19
+
+AI Companion:
+- Verified current Supabase guidance for authenticated Edge Functions: signed-in client calls use the user's JWT in `Authorization`, and the API key belongs in `apikey`.
+- Confirmed `nm-ai-companion` remains ACTIVE version 4 with JWT verification enabled.
+- Confirmed the shipped compiled app calls `/functions/v1/nm-ai-companion` with the signed-in session access token and the publishable API key.
+- Added `window.NurtureMomCompanionQA.preflight()` to the Lab hardening runtime. It re-checks `nm_plus_access`, then makes a real authenticated Companion request using the current signed-in browser session. It does not contain, create, or expose a test password/token.
+- Added behavioral QA for the preflight contract; GitHub Actions run `35443449839` passed the Plus suite.
+- A real OpenAI-backed response still requires opening the Lab build while a real Founder/Plus session is signed in; the connector cannot mint or extract a user's session token.
+
+Notifications:
+- `notification-runtime.js` is loaded before the compiled app and registers `/sw.js`, creates a PushManager subscription, calls `nm_push_register`, and synchronizes the daily recovery reminder through `nm-care-routines`.
+- The Lab workflow now syntax-checks and behavior-tests the notification runtime; GitHub Actions run `35443449839` passed both notification QA steps.
+- Supabase currently contains one registered `nm_push_devices` row, proving at least one device has completed backend push registration.
+- Supabase delivery history contains a delivery with state `sent` and no error code, proving the backend delivery pipeline has successfully processed at least one notification delivery.
+- No `nm_care_routines` row currently exists, so the new automatic daily recovery reminder has not yet been created by a signed-in device with reminders enabled.
+- Final Android acceptance still needs a real device check for permission allow/deny, background/cold-start delivery, notification tap/open behavior, and restart persistence.
+
+Latest green Lab QA:
+- Run: `35443449839`
+- Head: `6ef227f5c478150c4b73a983cfc9fc602f34d260`
+- Plus behavioral acceptance: passed
+- Notification runtime syntax: passed
+- Notification runtime behavioral acceptance: passed
+- Runtime ordering and protected markers: passed
+
 ## Next priorities
 
 1. Finish the AI companion using Cloudflare/Supabase only.
