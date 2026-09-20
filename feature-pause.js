@@ -25,6 +25,9 @@
         small.textContent = 'Your Plus benefits are active on this account';
       }
       entry.setAttribute('aria-label', 'Open Plus benefits for this account');
+      entry.hidden = true;
+      entry.setAttribute('aria-hidden', 'true');
+      entry.setAttribute('data-nm-plus-profile-status', 'navigation-only');
     });
 
     document.querySelectorAll('h1, h2, [data-slot="dialog-title"]').forEach((el) => {
