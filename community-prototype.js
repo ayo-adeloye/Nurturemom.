@@ -267,30 +267,31 @@
   }
 
   async function injectPlusNav() {
-    if (!(await plusActive())) {
-      document.querySelectorAll('.nm-plus-nav').forEach((el) => el.remove());
-      return;
-    }
-    const schedules = [...document.querySelectorAll('button,a')].filter((el) => el.textContent.trim() === 'Schedule');
-    for (const schedule of schedules) {
-      const parent = schedule.parentElement;
-      if (!parent) continue;
-      const labels = [...parent.querySelectorAll('button,a')].map((el) => el.textContent.trim());
-      if (!labels.includes('Home') || !labels.includes('Recovery')) continue;
-      if (parent.querySelector('.nm-plus-nav')) continue;
-      const item = schedule.cloneNode(true);
-      item.classList.add('nm-plus-nav');
-      item.setAttribute('href', '#Plus');
-      item.removeAttribute('type');
-      item.setAttribute('aria-label', 'Plus benefits');
-      replaceText(item, 'Schedule', 'Plus');
-      item.addEventListener('click', (event) => {
+    // Plus is accessed from the account-plan badge in the header, not the mobile/desktop nav.
+    document.querySelectorAll('.nm-plus-nav').forEach((el) => el.remove());
+    if (!(await plusActive())) return;
+
+    const candidates = [...document.querySelectorAll('button,a,div,span')].filter((el) => {
+      const text = String(el.textContent || '').replace(/\s+/g, ' ').trim();
+      return /^NurtureMom Plus(?: Founder)?$/i.test(text) || /^NurtureMom Plus\s+Founder$/i.test(text);
+    });
+
+    for (const label of candidates) {
+      const target = label.closest('button,a') || label;
+      if (target.dataset.nmPlusHeaderLink === 'true') continue;
+      target.dataset.nmPlusHeaderLink = 'true';
+      target.setAttribute('role', target.tagName === 'A' || target.tagName === 'BUTTON' ? target.getAttribute('role') || '' : 'button');
+      target.setAttribute('tabindex', '0');
+      target.setAttribute('aria-label', 'Open NurtureMom Plus benefits');
+      target.style.cursor = 'pointer';
+      const openPlus = (event) => {
         event.preventDefault();
         location.hash = 'Plus';
+      };
+      target.addEventListener('click', openPlus);
+      target.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') openPlus(event);
       });
-      const community = parent.querySelector('.nm-community-nav');
-      if (community) community.insertAdjacentElement('afterend', item);
-      else schedule.insertAdjacentElement('afterend', item);
     }
   }
 
