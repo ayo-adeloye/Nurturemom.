@@ -251,6 +251,38 @@
     }
   }
 
+  // ---------- Ask NurtureMom presentation cleanup ----------
+  function cleanCompanionPresentation() {
+    // Keep one strong Ask NurtureMom entry point; remove the duplicate PRIVATE COMPANION card.
+    document.querySelectorAll('section,article,div').forEach(function (el) {
+      const text = String(el.textContent || '').replace(/\s+/g, ' ').trim();
+      if (/^PRIVATE COMPANION\b/i.test(text) && /Ask NurtureMom/i.test(text)) {
+        const nestedDuplicate = Array.from(el.querySelectorAll('section,article,div')).some(function (child) {
+          const childText = String(child.textContent || '').replace(/\s+/g, ' ').trim();
+          return /^PRIVATE COMPANION\b/i.test(childText) && /Ask NurtureMom/i.test(childText);
+        });
+        if (!nestedDuplicate) {
+          el.hidden = true;
+          el.setAttribute('aria-hidden', 'true');
+          el.setAttribute('data-nm-companion-duplicate', 'hidden');
+        }
+      }
+    });
+
+    const dialog = document.querySelector('.companion-dialog,[role="dialog"]');
+    if (!dialog || !/Ask NurtureMom/i.test(String(dialog.textContent || ''))) return;
+
+    dialog.classList.add('nm-companion-polished');
+
+    // Friendly privacy control label.
+    Array.from(dialog.querySelectorAll('label,button,p,span,div')).forEach(function (el) {
+      const text = String(el.textContent || '').replace(/\s+/g, ' ').trim();
+      if (text === 'Use my NurtureMom context') {
+        el.setAttribute('title', 'Use your saved NurtureMom profile and recent check-in context to personalize this conversation.');
+      }
+    });
+  }
+
   // ---------- Voice Moments transport ----------
   const speech = window.speechSynthesis;
   let lastVoiceMoment = null;
@@ -416,7 +448,13 @@
     '.nm-voice-transport{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0 4px}',
     '.nm-voice-transport button{border:1px solid #d8c4c7;background:#fffaf8;color:#6f425c;border-radius:12px;padding:10px 8px;font-weight:700;cursor:pointer}',
     '.nm-voice-transport button:disabled{opacity:.42;cursor:not-allowed}',
-    '@media(max-width:380px){.nm-voice-transport{grid-template-columns:1fr}.nm-voice-transport button{width:100%}}'
+    '@media(max-width:380px){.nm-voice-transport{grid-template-columns:1fr}.nm-voice-transport button{width:100%}}',
+    '.nm-companion-polished{max-width:min(720px,94vw)!important}',
+    '.nm-companion-polished .companion-messages,.nm-companion-polished [class*="messages"]{min-height:300px;max-height:52vh;overflow-y:auto}',
+    '.nm-companion-polished [class*="message"],.nm-companion-polished [class*="bubble"]{white-space:pre-wrap;overflow:visible!important;text-overflow:clip!important;height:auto!important;max-height:none!important;line-height:1.5}',
+    '.nm-companion-polished [class*="assistant"],.nm-companion-polished [class*="companion-message"]{background:#fff8f6;border:1px solid #eadbdc;color:#5f4653}',
+    '.nm-companion-polished small,.nm-companion-polished [class*="disclaimer"]{line-height:1.35;opacity:.78}',
+    '.nm-companion-polished [class*="emergency"]{opacity:.9;font-size:12px;line-height:1.35}'
   ].join('');
   document.head.appendChild(style);
 
