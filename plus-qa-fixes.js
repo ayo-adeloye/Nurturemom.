@@ -255,6 +255,46 @@
   const speech = window.speechSynthesis;
   let lastVoiceMoment = null;
 
+  const VOICE_MOMENT_HISTORY_KEY = 'nurturemom.voice.moments.recent.v1';
+  const VOICE_MOMENT_SCRIPTS = [
+    'You have carried a lot today. Let your shoulders soften. You do not have to solve everything in this moment. Take one slow breath, then another. Recovery is happening in small, quiet ways, even when you cannot see it.',
+    'This moment belongs to you. Notice one thing your body is asking for: water, food, rest, a shower, fresh air, or simply stillness. Choosing one small act of care is enough for right now.',
+    'A hard day does not erase your progress. Motherhood and recovery are not measured by perfect days. Give yourself permission to do less, receive help, and begin again gently when you are ready.',
+    'You deserve the same kindness you would offer another mother. Speak to yourself softly today. You are learning your baby, learning your changing body, and learning a new rhythm. That is meaningful work.',
+    'Take a slow breath in and let it leave without rushing. Unclench your jaw. Drop your shoulders. You are allowed to create a small pocket of calm, even when everything around you feels busy.',
+    'There is strength in asking for support. Think of one thing someone else could carry for you today: a meal, a load of laundry, a phone call, or simply sitting with you. You do not have to carry every task alone.',
+    'Notice something you have done well today, however small. Maybe you fed your baby, rested when you could, drank some water, or made it through a difficult hour. Small wins count. They are part of your recovery.',
+    'Your pace does not need to match anyone else’s. Healing can be uneven, and every mother’s season looks different. For these next few minutes, release comparison and give your attention to what you need today.'
+  ];
+
+  function chooseVoiceMomentScript(originalText) {
+    let recent = [];
+    try { recent = JSON.parse(nativeStorage.getItem.call(localStorage, VOICE_MOMENT_HISTORY_KEY) || '[]') || []; } catch (_) {}
+    const pool = VOICE_MOMENT_SCRIPTS.filter(function (text) { return !recent.includes(text); });
+    const choices = pool.length ? pool : VOICE_MOMENT_SCRIPTS;
+    const text = choices[Math.floor(Math.random() * choices.length)] || String(originalText || '');
+    const next = [text].concat(recent.filter(function (item) { return item !== text; })).slice(0, 4);
+    try { nativeStorage.setItem.call(localStorage, VOICE_MOMENT_HISTORY_KEY, JSON.stringify(next)); } catch (_) {}
+    return text;
+  }
+
+  function preferredWarmVoice() {
+    if (!speech || typeof speech.getVoices !== 'function') return null;
+    const voices = speech.getVoices() || [];
+    const english = voices.filter(function (voice) { return /^en([-_]|$)/i.test(String(voice.lang || '')); });
+    const warmNames = /samantha|victoria|karen|moira|tessa|zira|aria|jenny|ava|emma|female|woman/i;
+    return english.find(function (voice) { return warmNames.test(String(voice.name || '')); }) || english[0] || voices[0] || null;
+  }
+
+  function normalizeVoiceDurationChoices() {
+    if (!voiceMomentViewVisible()) return;
+    document.querySelectorAll('button').forEach(function (button) {
+      const text = String(button.textContent || '').trim();
+      const match = text.match(/^(\d+)\s*(?:min|minute)/i);
+      if (match && !['5','10'].includes(match[1])) button.hidden = true;
+    });
+  }
+
   function voiceMomentViewVisible() {
     return Array.from(document.querySelectorAll('h1,h2,h3')).some(function (el) {
       return String(el.textContent || '').trim() === 'NurtureMom Voice Moments';
@@ -331,10 +371,16 @@
     try {
       speech.speak = function (utterance) {
       if (voiceMomentViewVisible() && utterance) {
+        utterance.text = chooseVoiceMomentScript(utterance.text);
+        utterance.rate = 0.82;
+        utterance.pitch = 1.03;
+        utterance.lang = utterance.lang || 'en-US';
+        const warmVoice = preferredWarmVoice();
+        if (warmVoice) utterance.voice = warmVoice;
         lastVoiceMoment = {
           text: String(utterance.text || ''),
-          rate: Number.isFinite(utterance.rate) ? utterance.rate : 1,
-          pitch: Number.isFinite(utterance.pitch) ? utterance.pitch : 1,
+          rate: utterance.rate,
+          pitch: utterance.pitch,
           volume: Number.isFinite(utterance.volume) ? utterance.volume : 1,
           lang: String(utterance.lang || ''),
           voice: utterance.voice || null
