@@ -239,6 +239,20 @@
     }
   }
 
+  function refreshScheduleIcons() {
+    [...document.querySelectorAll('button,a')].filter((el) => el.textContent.trim() === 'Schedule').forEach((schedule) => {
+      const parent = schedule.parentElement;
+      if (!parent) return;
+      const labels = [...parent.querySelectorAll('button,a')].map((el) => el.textContent.trim());
+      if (!labels.includes('Home') || !labels.includes('Recovery')) return;
+      const svg = schedule.querySelector('svg');
+      if (!svg || schedule.dataset.nmScheduleIcon === 'true') return;
+      schedule.dataset.nmScheduleIcon = 'true';
+      svg.setAttribute('viewBox', '0 0 24 24');
+      svg.innerHTML = '<rect x="4" y="5" width="16" height="15" rx="3"></rect><path d="M8 3v4M16 3v4M4 9h16"></path><path d="m8.5 14 2 2 4.5-4.5"></path>';
+    });
+  }
+
   async function injectCommunityNav() {
     if (!(await plusActive())) {
       document.querySelectorAll('.nm-community-nav').forEach((el) => el.remove());
@@ -257,6 +271,11 @@
       item.setAttribute('type', 'button');
       item.setAttribute('aria-label', 'Community');
       replaceText(item, 'Schedule', 'Community');
+      const communitySvg = item.querySelector('svg');
+      if (communitySvg) {
+        communitySvg.setAttribute('viewBox', '0 0 24 24');
+        communitySvg.innerHTML = '<circle cx="9" cy="8" r="3"></circle><circle cx="16.5" cy="9.5" r="2.5"></circle><path d="M3.5 19c.5-3.5 2.6-5.5 5.5-5.5s5 2 5.5 5.5"></path><path d="M14 14.5c2.9-.7 5.7 1.1 6.5 4.5"></path>';
+      }
       item.addEventListener('click', (event) => {
         event.preventDefault();
         event.stopPropagation();
