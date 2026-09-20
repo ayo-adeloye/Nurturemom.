@@ -239,6 +239,24 @@
     }
   }
 
+  function cleanProfileAndGreeting() {
+    document.querySelectorAll('.plus-profile-entry').forEach((entry) => {
+      entry.hidden = true;
+      entry.style.display = 'none';
+      entry.setAttribute('aria-hidden', 'true');
+      entry.setAttribute('data-nm-plus-profile-status', 'header-only');
+    });
+
+    document.querySelectorAll('h1,h2').forEach((el) => {
+      const text = String(el.textContent || '').replace(/\s+/g, ' ').trim();
+      if (!/^A little care for you,/i.test(text)) return;
+      const rawName = text.replace(/^A little care for you,\s*/i, '').replace(/[.!]+$/, '').trim();
+      if (!rawName || /\bnurture\b/i.test(rawName) || /^baba\b/i.test(rawName)) {
+        el.textContent = 'A little care for you.';
+      }
+    });
+  }
+
   function refreshScheduleIcons() {
     [...document.querySelectorAll('button,a')].filter((el) => el.textContent.trim() === 'Schedule').forEach((schedule) => {
       const parent = schedule.parentElement;
