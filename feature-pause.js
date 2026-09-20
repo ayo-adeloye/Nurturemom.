@@ -69,8 +69,10 @@
     applyProductState();
   }
 
-  const observer = new MutationObserver(applyProductState);
-  observer.observe(document.documentElement, { childList: true, subtree: true });
+  window.addEventListener('hashchange', applyProductState);
+  window.addEventListener('nurturemom:session-changed', applyProductState);
+  setTimeout(applyProductState, 500);
+  setTimeout(applyProductState, 1500);
 
   window.NurtureMomPausedFeatures = Object.freeze({
     askNurtureMom: true,
