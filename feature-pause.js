@@ -2,7 +2,7 @@
   'use strict';
 
   const FEATURE = 'ask-nurturemom';
-  const paused = true;
+  const paused = false;
   if (!paused) return;
 
   window.NurtureMomFeatures = Object.freeze({
