@@ -266,6 +266,34 @@
     }
   }
 
+  async function injectPlusNav() {
+    if (!(await plusActive())) {
+      document.querySelectorAll('.nm-plus-nav').forEach((el) => el.remove());
+      return;
+    }
+    const schedules = [...document.querySelectorAll('button,a')].filter((el) => el.textContent.trim() === 'Schedule');
+    for (const schedule of schedules) {
+      const parent = schedule.parentElement;
+      if (!parent) continue;
+      const labels = [...parent.querySelectorAll('button,a')].map((el) => el.textContent.trim());
+      if (!labels.includes('Home') || !labels.includes('Recovery')) continue;
+      if (parent.querySelector('.nm-plus-nav')) continue;
+      const item = schedule.cloneNode(true);
+      item.classList.add('nm-plus-nav');
+      item.setAttribute('href', '#Plus');
+      item.removeAttribute('type');
+      item.setAttribute('aria-label', 'Plus benefits');
+      replaceText(item, 'Schedule', 'Plus');
+      item.addEventListener('click', (event) => {
+        event.preventDefault();
+        location.hash = 'Plus';
+      });
+      const community = parent.querySelector('.nm-community-nav');
+      if (community) community.insertAdjacentElement('afterend', item);
+      else schedule.insertAdjacentElement('afterend', item);
+    }
+  }
+
   async function injectCard() {
     if (!(await plusActive())) {
       document.getElementById('nmFindCircleCard')?.remove();
@@ -291,7 +319,7 @@
 
   function render() {
     clearTimeout(renderTimer);
-    renderTimer = setTimeout(() => { injectCard().catch(() => {}); injectCommunityNav().catch(() => {}); }, 90);
+    renderTimer = setTimeout(() => { injectCard().catch(() => {}); injectCommunityNav().catch(() => {}); injectPlusNav().catch(() => {}); }, 90);
   }
 
   function boot() {
