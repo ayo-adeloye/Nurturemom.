@@ -309,10 +309,10 @@
     };
 
     apply();
-    new MutationObserver(apply).observe(document.documentElement, {
-      childList: true,
-      subtree: true
-    });
+    window.addEventListener('hashchange', apply);
+    window.addEventListener('nurturemom:session-changed', apply);
+    setTimeout(apply, 500);
+    setTimeout(apply, 1500);
   }
 
   patchStorage();
