@@ -150,5 +150,9 @@
   }
 
   window.addEventListener('storage', refresh);
-  setInterval(refresh, 2500);
+  window.addEventListener('nurturemom:session-changed', refresh);
+  window.addEventListener('hashchange', refresh);
+  document.addEventListener('visibilitychange', function () {
+    if (!document.hidden) refresh();
+  });
 })();
