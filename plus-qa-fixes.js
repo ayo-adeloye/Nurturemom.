@@ -254,18 +254,30 @@
   // ---------- Ask NurtureMom presentation cleanup ----------
   function cleanCompanionPresentation() {
     // Keep one strong Ask NurtureMom entry point; remove the duplicate PRIVATE COMPANION card.
-    document.querySelectorAll('section,article,div').forEach(function (el) {
-      const text = String(el.textContent || '').replace(/\s+/g, ' ').trim();
-      if (/^PRIVATE COMPANION\b/i.test(text) && /Ask NurtureMom/i.test(text)) {
-        const nestedDuplicate = Array.from(el.querySelectorAll('section,article,div')).some(function (child) {
-          const childText = String(child.textContent || '').replace(/\s+/g, ' ').trim();
-          return /^PRIVATE COMPANION\b/i.test(childText) && /Ask NurtureMom/i.test(childText);
-        });
-        if (!nestedDuplicate) {
-          el.hidden = true;
-          el.setAttribute('aria-hidden', 'true');
-          el.setAttribute('data-nm-companion-duplicate', 'hidden');
+    Array.from(document.querySelectorAll('*')).forEach(function (label) {
+      const ownText = Array.from(label.childNodes || [])
+        .filter(function (node) { return node.nodeType === Node.TEXT_NODE; })
+        .map(function (node) { return String(node.textContent || ''); })
+        .join(' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+      if (!/^PRIVATE COMPANION$/i.test(ownText)) return;
+
+      let card = label;
+      for (let depth = 0; depth < 6 && card && card.parentElement; depth += 1) {
+        const parent = card.parentElement;
+        const text = String(parent.textContent || '').replace(/\s+/g, ' ').trim();
+        if (/PRIVATE COMPANION/i.test(text) && /Ask NurtureMom/i.test(text) && text.length < 320) {
+          card = parent;
+          continue;
         }
+        break;
+      }
+      if (card && card !== document.body) {
+        card.hidden = true;
+        card.style.display = 'none';
+        card.setAttribute('aria-hidden', 'true');
+        card.setAttribute('data-nm-companion-duplicate', 'hidden');
       }
     });
 
